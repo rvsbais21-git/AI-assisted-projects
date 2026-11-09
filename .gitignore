@@ -1,0 +1,16 @@
+# OS / editor
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+
+# Dependencies and build output (for future React migration)
+node_modules/
+dist/
+build/
+
+# Local backups and personal data — do not commit
+*.json
+purgatory-backup-*.json
+.env
+.env.*
