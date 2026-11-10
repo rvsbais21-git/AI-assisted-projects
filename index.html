@@ -73,5 +73,5 @@ function loadSpotifyEmbed(){const url=localStorage.getItem('purgatorySpotifyEmbe
 $('saveSpotifyUrl').onclick=()=>{const url=spotifyEmbedUrl($('spotifyUrlInput').value);if(!url)return alert('Paste a valid Spotify share link for a track, album, playlist, artist, show, or episode.');localStorage.setItem('purgatorySpotifyEmbedUrl',url);loadSpotifyEmbed()};
 $('clearSpotifyUrl').onclick=()=>{localStorage.removeItem('purgatorySpotifyEmbedUrl');$('spotifyUrlInput').value='';$('spotifyFrame').src='';loadSpotifyEmbed()};
 $('changeSpotifyUrl').onclick=()=>{$('spotifySetup').style.display='block';$('spotifyPlayerWrap').style.display='none'};
-renderAll();loadCalendarEmbed();loadSpotifyEmbed();
+renderAll();loadCalendarEmbed();loadSpotifyEmbed();initResources();
 </script></body></html>
