@@ -6,8 +6,156 @@
 @media(max-width:850px){.shell{grid-template-columns:1fr}.side{position:relative;height:auto;padding:14px;border:0;border-bottom:1px solid var(--line)}.brand{font-size:26px}nav{display:flex;overflow:auto;margin-top:12px;gap:4px}nav button{white-space:nowrap;padding:9px}.sidefoot{display:none}.main{padding:20px 14px}.s3,.s4{grid-column:span 6}.s8{grid-column:span 12}}@media(max-width:540px){.s3,.s4,.s6{grid-column:span 12}.form{grid-template-columns:1fr 1fr}.date{font-size:9px}}
 </style>
 
-</head><body><div class="shell"><aside class="side"><div class="brand">PURGATORY<span>.</span></div><div class="tag">PERSONAL OPERATING SYSTEM / 001</div><nav id="nav"><button class="active" data-page="overview"><b>00</b>Overview</button><button data-page="health"><b>01</b>Health</button><button data-page="academics"><b>02</b>Academics</button><button data-page="dsa"><b>03</b>DSA</button><button data-page="analytics"><b>04</b>Analytics</button><button data-page="settings"><b>05</b>Data</button></nav><div class="sidefoot">LOCAL BUILD // V0.2<br>DISCIPLINE IS A PRACTICE.<br>DATA STAYS IN THIS BROWSER.</div></aside><main class="main"><header class="top"><div><div class="eyebrow" id="crumb">SYSTEM / OVERVIEW</div><h1 id="title">Command Center</h1></div><div class="date" id="date"></div></header>
-<section id="overview" class="page"><div class="grid"><div class="card s3"><div class="label">Training sessions / 7d</div><div class="metric" id="mTrain">0</div><div class="sub">Logged sessions</div></div><div class="card s3"><div class="label">Tasks completed / 7d</div><div class="metric" id="mTasks">0</div></div><div class="card s3"><div class="label">Habits / today</div><div class="metric" id="mHabits">0/4</div></div><div class="card s3"><div class="label">Next exam</div><div class="metric" id="mExam">—</div><div class="sub" id="mExamName">No exam configured</div></div><div class="card s8"><h2 class="paneltitle">Today's directives</h2><div id="todayTasks" class="empty">No tasks added for today.</div></div><div class="card s4"><h2 class="paneltitle">Academic completion</h2><div class="metric" id="completion">0%</div><div class="track"><div class="fill" id="completionBar" style="width:0%"></div></div><p class="note">Progress reflects completed syllabus subtopics.</p></div></div><div class="head"><h2>Calendar</h2><span class="pill">GOOGLE / MONTH VIEW</span></div><div class="card s12" id="calendarPanel"><div class="row" style="justify-content:space-between;align-items:center;margin-bottom:12px"><div><h2 class="paneltitle">Your schedule</h2><p class="note">Private Google Calendar embed · visible only to accounts with calendar permission</p></div><a class="btn" href="https://calendar.google.com/calendar/u/0/r/month" target="_blank" rel="noopener">OPEN GOOGLE CALENDAR ↗</a></div><div id="calendarSetup"><p class="note">To show your actual events here, paste the private calendar embed URL from Google Calendar → Settings → your calendar → Integrate calendar. Do not make your calendar public.</p><label>Private calendar embed URL<input id="calendarEmbedInput" class="field" type="url" placeholder="https://calendar.google.com/calendar/embed?src=…"></label><div class="row" style="margin-top:10px"><button class="btn primary" id="saveCalendarEmbed">SAVE CALENDAR VIEW</button><button class="btn" id="clearCalendarEmbed">CLEAR</button></div></div><div id="calendarFrameWrap" style="display:none;margin-top:14px"><div class="row" style="justify-content:flex-end;margin-bottom:8px"><button class="btn" id="editCalendarEmbed">CHANGE EMBED</button></div><iframe id="calendarFrame" title="Private Google Calendar month view" style="width:100%;height:420px;border:1px solid var(--line);border-radius:3px;background:#fff" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe></div></div><div class="head"><h2>Music</h2><span class="pill">SPOTIFY PLAYER</span></div><div class="card s12" id="spotifyPanel"><div class="row" style="justify-content:space-between;align-items:center;margin-bottom:12px"><div><h2 class="paneltitle">Focus soundtrack</h2><p class="note">Play a Spotify track, album, or playlist inside PURGATORY.</p></div><a class="btn" href="https://open.spotify.com/" target="_blank" rel="noopener">OPEN SPOTIFY ↗</a></div><div id="spotifySetup"><label>Spotify share link<input id="spotifyUrlInput" class="field" type="url" placeholder="https://open.spotify.com/playlist/…"></label><div class="row" style="margin-top:10px"><button class="btn primary" id="saveSpotifyUrl">LOAD PLAYER</button><button class="btn" id="clearSpotifyUrl">CLEAR</button></div><p class="note" style="margin-top:8px">Paste a Spotify share link. Playback and account restrictions are controlled by Spotify; you may need to sign in there.</p></div><div id="spotifyPlayerWrap" style="display:none;margin-top:14px"><div class="row" style="justify-content:flex-end;margin-bottom:8px"><button class="btn" id="changeSpotifyUrl">CHANGE MUSIC</button></div><iframe id="spotifyFrame" title="Spotify music player" style="width:100%;height:352px;border:0;border-radius:12px;background:#121212" loading="lazy" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" referrerpolicy="strict-origin-when-cross-origin"></iframe><div class="head"><h2>Game Development News</h2><span class="pill">DEV / INDUSTRY</span></div><div class="card s12" id="gameNewsPanel"><div class="row" style="justify-content:space-between;align-items:center;margin-bottom:12px"><div><h2 class="paneltitle">Developer Dispatch</h2><p class="note">Latest updates from game-development publications and engine teams.</p></div><button class="btn" id="refreshGameNews">REFRESH FEED ↻</button></div><div class="row" style="gap:8px;margin-bottom:12px"><span class="pill">GAME DEVELOPER</span><span class="pill">UNREAL ENGINE</span><span class="pill">GODOT</span></div><div id="gameNewsStatus" class="note" style="margin-bottom:10px">Loading latest stories…</div><div id="gameNewsList"><div class="empty">Fetching game development news…</div></div><p class="note" style="margin-top:12px">Headlines and excerpts are fetched from public RSS feeds via RSS2JSON. Articles open on their original publisher websites.</p></div></div></div></section>
+
+<style id="purgatory-comic-layout">
+@import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow+Condensed:wght@600;700;800;900&family=DM+Mono:wght@400;500;700&family=Inter:wght@400;500;600;700&display=swap');
+:root{--bg:#08080a;--panel:#101014;--line:#f2eff0;--text:#f8f5f5;--muted:#b5afb4;--red:#e51f3f;--red2:#ff3657;--soft:#260d16}
+body{background:#08080a;background-image:radial-gradient(#ffffff18 1px,transparent 1.5px);background-size:6px 6px;color:var(--text)}
+.shell{grid-template-columns:250px minmax(0,1fr);background:#08080a}
+.side{background:linear-gradient(180deg,#111115,#070709);border-right:5px solid var(--red);padding:26px 17px;box-shadow:5px 0 0 #eee}
+.brand{font:900 40px 'Bebas Neue',Impact,sans-serif;letter-spacing:1px;text-shadow:2px 2px 0 #7d1025}
+.brand span{color:var(--red2)}
+.tag,.mono,.eyebrow,.date,.label,.comic-kicker{font-family:'DM Mono',monospace}
+nav{gap:8px;margin-top:36px}
+nav button{background:#19191e;border:2px solid #777178;color:#f4eff1;font-weight:800;clip-path:polygon(0 0,94% 0,100% 50%,94% 100%,0 100%,4% 50%);padding:13px 12px}
+nav button.active{background:#4a0e1c;border:2px solid var(--red2);color:white;box-shadow:inset 5px 0 var(--red2)}
+nav b{color:#ff7085}
+.main{max-width:1800px;padding:24px clamp(14px,2.5vw,40px) 60px}
+.top{position:relative;border:3px solid #f3eff0;border-bottom:6px solid var(--red);padding:17px 22px;margin-bottom:22px;background:linear-gradient(110deg,#111116,#08080a);clip-path:polygon(0 0,100% 0,98% 100%,2% 100%)}
+.top:after{content:"";position:absolute;right:18px;top:8px;width:105px;height:85px;background:radial-gradient(#fff 1.5px,transparent 1.8px);background-size:8px 8px;opacity:.16;pointer-events:none}
+h1{font:900 clamp(42px,5vw,72px) 'Bebas Neue',Impact,sans-serif;letter-spacing:1px;text-shadow:3px 3px 0 #79152b;margin:4px 0}
+.eyebrow{color:#ff6b82;letter-spacing:3px}
+.date{color:#f0e8eb}
+.comic-overview{display:grid;gap:17px}
+.comic-stats{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:13px}
+.comic-stat{min-width:0;position:relative;padding:12px 16px 10px;background:linear-gradient(145deg,#19191e,#0b0b0e);border:2px solid #eee;clip-path:polygon(0 0,96% 0,100% 100%,4% 100%);box-shadow:4px 4px 0 #b51631}
+.comic-stat .metric{font:900 38px 'Bebas Neue',Impact;margin:4px 0 0;color:#fff;text-shadow:2px 2px 0 #9c1931}
+.comic-stat small{display:block;font:10px 'DM Mono';letter-spacing:1.4px;color:#c9c1c5}
+.comic-panel{position:relative;min-width:0;background:#f5f1f2;padding:4px;box-shadow:5px 5px 0 #050506,8px 8px 0 #a81731;isolation:isolate;overflow:hidden}
+.comic-panel:before{content:"";position:absolute;inset:4px;background:radial-gradient(#fff 1px,transparent 1.7px),linear-gradient(145deg,#19191f,#09090c);background-size:7px 7px,100% 100%;opacity:1;z-index:-1}
+.comic-panel-inner{position:relative;padding:clamp(17px,2vw,27px);min-width:0}
+.comic-feature-grid{display:grid;grid-template-columns:1fr 1fr;gap:18px;align-items:stretch}
+.panel-training{clip-path:polygon(3% 0,100% 0,95% 100%,0 94%)}
+.panel-training:before{clip-path:polygon(3% 0,100% 0,95% 100%,0 94%)}
+.panel-academics{clip-path:polygon(5% 0,100% 5%,97% 100%,0 100%)}
+.panel-academics:before{clip-path:polygon(5% 0,100% 5%,97% 100%,0 100%)}
+.comic-feature-grid .comic-panel-inner{min-height:220px;padding-right:34%}
+.comic-kicker{font-size:10px;letter-spacing:2px;color:#ff7388;font-weight:700;margin-bottom:9px}
+.comic-panel h2{font:900 clamp(25px,3vw,39px) 'Bebas Neue',Impact,sans-serif;letter-spacing:1.5px;margin:0 0 13px;color:#fff;text-shadow:2px 2px 0 #76152a}
+.comic-panel h2 em{font-style:normal;color:#ff536d}
+.comic-feature-value{display:flex;align-items:center;gap:14px;margin:12px 0}
+.comic-feature-value strong{font:900 clamp(45px,5vw,66px) 'Bebas Neue',Impact;color:#fff;text-shadow:3px 3px 0 #a51a34}
+.comic-feature-value span{font:11px 'DM Mono';letter-spacing:1.5px;line-height:1.6;color:#eee}
+.comic-panel p{color:#c9c1c7;font-size:12px;line-height:1.55}
+.comic-progress{height:10px;background:#38363b;border:1px solid #eee;max-width:320px;transform:skewX(-13deg)}
+.comic-progress span{display:block;height:100%;background:linear-gradient(90deg,#a61530,#ff405e)}
+.comic-art{position:absolute;right:0;top:0;bottom:0;width:34%;pointer-events:none;opacity:.38;background:radial-gradient(#fff 1px,transparent 1.7px),linear-gradient(135deg,transparent 20%,#f1edf0 20.5%,transparent 21%),linear-gradient(45deg,transparent 65%,#b51c37 65.5%,transparent 67%);background-size:7px 7px,100% 100%,100% 100%;mask-image:linear-gradient(90deg,transparent,#000 35%)}
+.comic-art span{position:absolute;right:12%;bottom:4%;font:900 90px 'Bebas Neue';color:#fff;opacity:.3}
+.panel-academics .comic-panel-inner{padding-right:32%}
+.comic-middle-grid{display:grid;grid-template-columns: minmax(0,8fr) minmax(300px,4fr);gap:18px;align-items:stretch}
+.panel-directives{clip-path:polygon(5% 0,100% 0,96% 100%,0 100%)}
+.panel-directives:before{clip-path:polygon(5% 0,100% 0,96% 100%,0 100%)}
+.panel-calendar{clip-path:polygon(4% 0,100% 0,96% 100%,0 96%)}
+.panel-calendar:before{clip-path:polygon(4% 0,100% 0,96% 100%,0 96%)}
+.panel-directives .comic-panel-inner,.panel-calendar .comic-panel-inner{padding:22px 26px}
+.panel-calendar h3{font:900 23px 'Bebas Neue';color:#fff;margin:15px 0 4px}
+.comic-panel-heading{display:flex;justify-content:space-between;gap:12px;align-items:center;flex-wrap:wrap}
+.comic-link{display:inline-block;border:2px solid var(--red2);padding:9px 12px;color:#fff;text-decoration:none;font:700 10px 'DM Mono';letter-spacing:.7px;transform:skewX(-8deg)}
+.comic-lower-grid{display:grid;grid-template-columns:1fr 1fr 1.35fr;gap:17px;align-items:stretch}
+.panel-dsa{clip-path:polygon(4% 0,100% 0,95% 100%,0 96%)}
+.panel-dsa:before{clip-path:polygon(4% 0,100% 0,95% 100%,0 96%)}
+.panel-analytics{clip-path:polygon(0 0,96% 0,100% 95%,4% 100%)}
+.panel-analytics:before{clip-path:polygon(0 0,96% 0,100% 95%,4% 100%)}
+.panel-music{clip-path:polygon(4% 0,100% 0,96% 100%,0 96%)}
+.panel-music:before{clip-path:polygon(4% 0,100% 0,96% 100%,0 96%)}
+.panel-news{clip-path:polygon(2% 0,100% 0,98% 100%,0 96%)}
+.panel-news:before{clip-path:polygon(2% 0,100% 0,98% 100%,0 96%)}
+.panel-dsa .comic-panel-inner,.panel-analytics .comic-panel-inner,.panel-music .comic-panel-inner,.panel-news .comic-panel-inner{padding:22px 25px}
+.comic-panel .empty{background:#0d0c10;border:1px dashed #bdb3b8;color:#eee}
+.comic-panel .field{background:#08080b;border:1px solid #777;color:#fff;border-radius:0}
+.comic-panel .btn{border-radius:0;background:#271018;border:2px solid #ff506a;color:#fff;font:700 10px 'DM Mono';clip-path:polygon(0 0,96% 0,100% 18%,100% 100%,4% 100%,0 82%)}
+.comic-panel .btn.primary{background:#d91e3c;border-color:#fff}
+.comic-panel .pill{color:#ff9eae;border-color:#d83a56}
+#todayTasks{min-height:95px}
+#calendarFrame{width:100%;max-width:100%}
+#spotifyFrame{width:100%;max-width:100%}
+.panel-news .comic-panel-inner{padding:22px 26px}
+.page:not(#overview){position:relative}
+.page:not(#overview) .card{border:2px solid #eee;border-radius:0;box-shadow:4px 4px 0 #9d1730;background:linear-gradient(145deg,#19191f,#0b0b0e)}
+.page:not(#overview) .head h2,.page:not(#overview) .paneltitle{font:900 26px 'Bebas Neue';letter-spacing:1px}
+.page:not(#overview) .btn{border-radius:0;clip-path:polygon(0 0,96% 0,100% 20%,100% 100%,4% 100%,0 80%)}
+.page:not(#overview) .field{border-radius:0}
+@media(max-width:1100px){.shell{grid-template-columns:215px minmax(0,1fr)}.comic-stats{grid-template-columns:repeat(2,minmax(0,1fr))}.comic-feature-grid{grid-template-columns:1fr 1fr}.comic-middle-grid{grid-template-columns:1fr}.comic-lower-grid{grid-template-columns:1fr 1fr}.panel-music{grid-column:span 2}}
+@media(max-width:850px){.shell{grid-template-columns:1fr}.side{position:relative;height:auto;padding:14px;border:0;border-bottom:5px solid var(--red);box-shadow:0 4px 0 #eee}.brand{font-size:31px}nav{display:flex;overflow-x:auto;margin-top:12px;gap:5px}nav button{white-space:nowrap;padding:10px 14px}.sidefoot{display:none}.main{padding:18px 13px 45px}.top{padding:14px 17px}}
+@media(max-width:620px){.comic-stats{grid-template-columns:1fr 1fr;gap:9px}.comic-feature-grid,.comic-middle-grid,.comic-lower-grid{grid-template-columns:1fr}.comic-feature-grid .comic-panel-inner{min-height:185px;padding-right:28%}.panel-music{grid-column:auto}.comic-panel-inner{padding:17px}.comic-panel h2{font-size:29px}.comic-feature-value strong{font-size:48px}.comic-panel-heading{align-items:flex-start}.comic-link{font-size:9px}.comic-stat{padding:10px}.comic-stat .metric{font-size:31px}}
+@media(prefers-reduced-motion:reduce){*{scroll-behavior:auto!important;transition:none!important}}
+</style></head><body><div class="shell"><aside class="side"><div class="brand">PURGATORY<span>.</span></div><div class="tag">PERSONAL OPERATING SYSTEM / 001</div><nav id="nav"><button class="active" data-page="overview"><b>00</b>Overview</button><button data-page="health"><b>01</b>Health</button><button data-page="academics"><b>02</b>Academics</button><button data-page="dsa"><b>03</b>DSA</button><button data-page="analytics"><b>04</b>Analytics</button><button data-page="settings"><b>05</b>Data</button></nav><div class="sidefoot">LOCAL BUILD // V0.2<br>DISCIPLINE IS A PRACTICE.<br>DATA STAYS IN THIS BROWSER.</div></aside><main class="main"><header class="top"><div><div class="eyebrow" id="crumb">SYSTEM / OVERVIEW</div><h1 id="title">Command Center</h1></div><div class="date" id="date"></div></header>
+<section id="overview" class="page">
+<div class="comic-overview">
+  <div class="comic-stats">
+    <div class="comic-stat"><span class="label">TRAINING / 7D</span><strong class="metric" id="mTrain">0</strong><small>SESSIONS</small></div>
+    <div class="comic-stat"><span class="label">TASKS / 7D</span><strong class="metric" id="mTasks">0</strong><small>COMPLETED</small></div>
+    <div class="comic-stat"><span class="label">HABITS / TODAY</span><strong class="metric" id="mHabits">0/4</strong><small>CHECKED</small></div>
+    <div class="comic-stat"><span class="label">NEXT EXAM</span><strong class="metric" id="mExam">—</strong><small id="mExamName">NO EXAM CONFIGURED</small></div>
+  </div>
+  <div class="comic-feature-grid">
+    <article class="comic-panel panel-training">
+      <div class="comic-panel-inner">
+        <div class="comic-kicker">01 / BODY & CONDITIONING</div>
+        <h2>TRAINING <em>/ HEALTH</em></h2>
+        <div class="comic-feature-value"><strong id="mTrainFeature">0</strong><span>SESSIONS<br>THIS WEEK</span></div>
+        <div class="comic-progress"><span id="trainingAccentBar" style="width:0%"></span></div>
+        <p>Consistency is built one session at a time.</p>
+      </div>
+      <div class="comic-art art-training" aria-hidden="true"><span>01</span></div>
+    </article>
+    <article class="comic-panel panel-academics">
+      <div class="comic-panel-inner">
+        <div class="comic-kicker">02 / STUDY & EXECUTION</div>
+        <h2>ACADEMICS</h2>
+        <div class="comic-feature-value"><strong id="completion">0%</strong><span>SYLLABUS<br>COMPLETED</span></div>
+        <div class="comic-progress"><span id="completionBar" style="width:0%"></span></div>
+        <p>Progress reflects completed syllabus subtopics.</p>
+      </div>
+      <div class="comic-art art-academics" aria-hidden="true"><span>02</span></div>
+    </article>
+  </div>
+  <div class="comic-middle-grid">
+    <article class="comic-panel panel-directives">
+      <div class="comic-panel-inner">
+        <div class="comic-kicker">03 / DAILY OBJECTIVES</div>
+        <h2>TODAY'S DIRECTIVES</h2>
+        <div id="todayTasks" class="empty">No tasks added for today.</div>
+      </div>
+    </article>
+    <article class="comic-panel panel-calendar" id="calendarPanel">
+      <div class="comic-panel-inner">
+        <div class="comic-kicker">04 / TIME & COMMITMENTS</div>
+        <div class="comic-panel-heading"><h2>CALENDAR</h2><a class="comic-link" href="https://calendar.google.com/calendar/u/0/r/month" target="_blank" rel="noopener">OPEN GOOGLE CALENDAR ↗</a></div>
+        <h3>YOUR SCHEDULE</h3>
+        <p class="note">Private Google Calendar embed · visible only to accounts with calendar permission.</p>
+        <div id="calendarSetup">
+          <p class="note">Paste the private calendar embed URL from Google Calendar → Settings → your calendar → Integrate calendar. Do not make your calendar public.</p>
+          <label>PRIVATE CALENDAR EMBED URL<input id="calendarEmbedInput" class="field" type="url" placeholder="https://calendar.google.com/calendar/embed?src=…"></label>
+          <div class="row" style="margin-top:10px"><button class="btn primary" id="saveCalendarEmbed">SAVE CALENDAR VIEW</button><button class="btn" id="clearCalendarEmbed">CLEAR</button></div>
+        </div>
+        <div id="calendarFrameWrap" style="display:none;margin-top:14px"><div class="row" style="justify-content:flex-end;margin-bottom:8px"><button class="btn" id="editCalendarEmbed">CHANGE EMBED</button></div><iframe id="calendarFrame" title="Private Google Calendar month view" style="width:100%;height:350px;border:1px solid var(--line);background:#fff" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe></div>
+      </div>
+    </article>
+  </div>
+  <div class="comic-lower-grid">
+    <article class="comic-panel panel-dsa"><div class="comic-panel-inner"><div class="comic-kicker">05 / PROBLEM SOLVING</div><h2>DSA</h2><p>Practice. Review. Repeat.</p><button class="btn" data-page="dsa">OPEN DSA LEDGER ↗</button></div></article>
+    <article class="comic-panel panel-analytics"><div class="comic-panel-inner"><div class="comic-kicker">06 / PERFORMANCE</div><h2>ANALYTICS</h2><p>Measure the work. Understand the trend.</p><button class="btn" data-page="analytics">VIEW ANALYTICS ↗</button></div></article>
+    <article class="comic-panel panel-music" id="spotifyPanel">
+      <div class="comic-panel-inner"><div class="comic-kicker">07 / FOCUS MODE</div><h2>MUSIC</h2><p>Focus soundtrack</p><a class="comic-link" href="https://open.spotify.com/" target="_blank" rel="noopener">OPEN SPOTIFY ↗</a>
+      <div id="spotifySetup"><label>SPOTIFY SHARE LINK<input id="spotifyUrlInput" class="field" type="url" placeholder="https://open.spotify.com/playlist/…"></label><div class="row" style="margin-top:10px"><button class="btn primary" id="saveSpotifyUrl">LOAD PLAYER</button><button class="btn" id="clearSpotifyUrl">CLEAR</button></div><p class="note">Playback and account restrictions are controlled by Spotify.</p></div>
+      <div id="spotifyPlayerWrap" style="display:none;margin-top:14px"><div class="row" style="justify-content:flex-end;margin-bottom:8px"><button class="btn" id="changeSpotifyUrl">CHANGE MUSIC</button></div><iframe id="spotifyFrame" title="Spotify music player" style="width:100%;height:240px;border:0;background:#121212" loading="lazy" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" referrerpolicy="strict-origin-when-cross-origin"></iframe></div>
+      </div>
+    </article>
+  </div>
+  <article class="comic-panel panel-news" id="gameNewsPanel"><div class="comic-panel-inner"><div class="comic-kicker">08 / INDUSTRY INTELLIGENCE</div><div class="comic-panel-heading"><h2>DEVELOPER DISPATCH</h2><button class="btn" id="refreshGameNews">REFRESH FEED ↻</button></div><div class="row" style="gap:8px;margin-bottom:12px"><span class="pill">GAME DEVELOPMENT</span><span class="pill">UNREAL ENGINE</span><span class="pill">GODOT</span></div><div id="gameNewsStatus" class="note" style="margin-bottom:10px">Loading latest stories…</div><div id="gameNewsList"><div class="empty">Fetching game development news…</div></div><p class="note">Headlines and excerpts are fetched from public RSS feeds. Articles open on their original publisher websites.</p></div></article>
+</div>
+</section>
 <section id="health" class="page hidden"><div class="head"><h2>Training log</h2><span class="pill">HEALTH / RECOVERY</span></div><div class="grid"><div class="card s4"><h2 class="paneltitle">Session details</h2><div class="form"><label>Date<input class="field" id="wDate" type="date"></label><label>Training day<select class="field" id="wDay"><option>Push</option><option>Pull</option><option>Legs</option><option>Upper</option><option>Lower</option><option>Full body</option><option>Cardio</option><option>Rest</option></select></label><label>Note<input class="field" id="wNote" placeholder="Session note"></label></div><button class="btn primary" id="saveWorkout">SAVE SESSION</button></div><div class="card s8"><h2 class="paneltitle">Exercises</h2><div class="tablewrap"><table><thead><tr><th>EXERCISE</th><th>SETS / VALUE (5+5+3)</th><th>MEASURE</th><th>LOAD</th><th>TOTAL</th><th></th></tr></thead><tbody id="exRows"></tbody></table></div><div class="row" style="margin-top:10px"><button class="btn" id="addEx">+ ADD EXERCISE</button><button class="btn" id="newExercise">+ NEW EXERCISE</button></div><p class="note">Select an exercise, enter sets separated by +, choose the measure, and optionally add weight. Examples: 5+5+3 reps · 30+30 seconds · 5 minutes · attendance.</p></div><div class="card s6"><h2 class="paneltitle">Daily health record</h2><div class="form"><label>Water (L)<input class="field" id="water" type="number" step=".1"></label><label>Protein (g)<input class="field" id="protein" type="number"></label><label>Sleep (hours)<input class="field" id="sleep" type="number" step=".1"></label><label>Weight (kg)<input class="field" id="weight" type="number" step=".1"></label><label>Waist (cm)<input class="field" id="waist" type="number" step=".1"></label><label>Screen time (h)<input class="field" id="screen" type="number" step=".1"></label></div><button class="btn primary" id="saveDaily">SAVE DAILY RECORD</button></div><div class="card s6"><h2 class="paneltitle">Daily habits</h2><div id="habits"></div><p class="note">Reading, coding, training, and sleep routine.</p></div><div class="card s12"><h2 class="paneltitle">Session history</h2><div id="workHistory"></div></div></div></section>
 <section id="academics" class="page hidden"><div class="head"><h2>Academic campaign</h2><span class="pill">SYLLABUS / EXECUTION</span></div><div class="grid"><div class="card s4"><h2 class="paneltitle">Add subject</h2><div class="form"><label>Subject<input class="field" id="subName"></label><label>Exam date<input class="field" id="subExam" type="date"></label></div><button class="btn primary" id="addSubject">ADD SUBJECT</button><hr style="border-color:var(--line);margin:18px 0"><h2 class="paneltitle">Add subtopic</h2><div class="form"><label>Subject<select class="field" id="topicSubject"></select></label><label>Module<input class="field" id="topicModule"></label><label>Subtopic<input class="field" id="topicName"></label></div><button class="btn" id="addTopic">ADD SUBTOPIC</button></div><div class="card s8"><h2 class="paneltitle">Syllabus tracker</h2><div id="subjects"></div></div><div class="card s4"><h2 class="paneltitle">Add daily task</h2><div class="form"><label>Task<input class="field" id="taskName"></label><label>Subject<select class="field" id="taskSubject"></select></label><label>Date<input class="field" type="date" id="taskDate"></label></div><button class="btn primary" id="addTask">ADD TASK</button></div><div class="card s8"><h2 class="paneltitle">Task ledger</h2><div id="tasks"></div></div><div class="card s12"><h2 class="paneltitle">Resources — Academics</h2><p class="note">Keep lecture PDFs, notes, reference documents, and useful links here. Stored only in this browser.</p><div class="form"><label>Resource title<input class="field" id="academicResourceTitle" placeholder="e.g. Physics Module 2 notes"></label><label>PDF file<input class="field" id="academicResourceFile" type="file" accept="application/pdf"></label><label>Or resource link<input class="field" id="academicResourceUrl" type="url" placeholder="https://…"></label></div><div class="row"><button class="btn primary" id="addAcademicResource">ADD RESOURCE</button></div><div id="academicResourceList" style="margin-top:14px"><div class="empty">Loading resources…</div></div></div></div></section>
 <section id="dsa" class="page hidden"><div class="head"><h2>Problem-solving ledger</h2><span class="pill">DSA / CONTESTS</span></div><div class="grid"><div class="card s6"><h2 class="paneltitle">Log problem</h2><div class="form"><label>Problem<input class="field" id="pName"></label><label>Topic<input class="field" id="pTopic"></label><label>Platform<input class="field" id="pPlatform"></label><label>Result<select class="field" id="pResult"><option>Solved independently</option><option>Solved with hints</option><option>Editorial / solution</option><option>Attempted</option></select></label><label>Date<input class="field" id="pDate" type="date"></label></div><button class="btn primary" id="addProblem">LOG PROBLEM</button></div><div class="card s6"><h2 class="paneltitle">Log contest</h2><div class="form"><label>Contest<input class="field" id="cName"></label><label>Problems solved<input class="field" id="cSolved" type="number"></label><label>Date<input class="field" id="cDate" type="date"></label></div><button class="btn primary" id="addContest">LOG CONTEST</button></div><div class="card s12"><h2 class="paneltitle">Problem history</h2><div id="problems"></div></div><div class="card s12"><h2 class="paneltitle">Contest history</h2><div id="contests"></div></div><div class="card s12"><h2 class="paneltitle">Resources — DSA</h2><p class="note">Keep topic notes, problem sheets, editorials, and reference links here. Stored only in this browser.</p><div class="form"><label>Resource title<input class="field" id="dsaResourceTitle" placeholder="e.g. Binary search patterns"></label><label>PDF file<input class="field" id="dsaResourceFile" type="file" accept="application/pdf"></label><label>Or resource link<input class="field" id="dsaResourceUrl" type="url" placeholder="https://…"></label></div><div class="row"><button class="btn primary" id="addDsaResource">ADD RESOURCE</button></div><div id="dsaResourceList" style="margin-top:14px"><div class="empty">Loading resources…</div></div></div></div></section>
