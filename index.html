@@ -173,13 +173,14 @@ h1{font:900 clamp(42px,5vw,72px) 'Bebas Neue',Impact,sans-serif;letter-spacing:1
  .comic-feature-value strong{font-size:46px!important}
 }
 </style><style id="dispatch-figure-background">
-#gameNewsPanel{position:relative;isolation:isolate;overflow:hidden}
-#gameNewsPanel:after{content:"";position:absolute;z-index:0;pointer-events:none;top:0;right:1%;bottom:0;width:min(52%,560px);background-image:url("./assets/dispatch-figure.svg");background-repeat:no-repeat;background-position:center right;background-size:contain;opacity:.34;mix-blend-mode:screen}
+#gameNewsPanel{position:relative;isolation:isolate;overflow:hidden;background:#08080a}
+#gameNewsPanel:after{content:"";position:absolute;z-index:0;pointer-events:none;top:0;right:0;bottom:0;width:58%;background-image:url("./assets/dispatch-figure.svg?v=2");background-repeat:no-repeat;background-position:right 38%;background-size:auto 108%;opacity:.48;mix-blend-mode:screen}
+#gameNewsPanel:before{z-index:0}
 #gameNewsPanel .comic-panel-inner{position:relative;z-index:1}
-#gameNewsPanel #gameNewsList{position:relative}
-#gameNewsPanel #gameNewsList>*{position:relative}
-@media(max-width:850px){#gameNewsPanel:after{right:-3%;width:65%;opacity:.2;background-position:center right}}
-@media(max-width:540px){#gameNewsPanel:after{right:-7%;width:78%;opacity:.14;background-position:center right}}
+#gameNewsPanel .comic-kicker,#gameNewsPanel h2,#gameNewsPanel .comic-panel-heading,#gameNewsPanel .row,#gameNewsPanel #gameNewsStatus,#gameNewsPanel #gameNewsList,#gameNewsPanel>.comic-panel-inner>p{position:relative;z-index:1}
+#gameNewsPanel #gameNewsList>*{background:linear-gradient(90deg,rgba(8,8,10,.96) 0%,rgba(8,8,10,.8) 57%,rgba(8,8,10,.35) 100%);position:relative}
+@media(max-width:850px){#gameNewsPanel:after{width:72%;background-position:right center;opacity:.32}}
+@media(max-width:540px){#gameNewsPanel:after{width:85%;background-position:right center;opacity:.24}}
 </style></head><body><div class="shell"><aside class="side"><div class="brand">PURGATORY<span>.</span></div><div class="tag">PERSONAL OPERATING SYSTEM / 001</div><nav id="nav"><button class="active" data-page="overview"><b>00</b>Overview</button><button data-page="health"><b>01</b>Health</button><button data-page="academics"><b>02</b>Academics</button><button data-page="dsa"><b>03</b>DSA</button><button data-page="analytics"><b>04</b>Analytics</button><button data-page="settings"><b>05</b>Data</button></nav><div class="sidefoot">LOCAL BUILD // V0.2<br>DISCIPLINE IS A PRACTICE.<br>DATA STAYS IN THIS BROWSER.</div></aside><main class="main"><header class="top"><div><div class="eyebrow" id="crumb">SYSTEM / OVERVIEW</div><h1 id="title">Command Center</h1></div><div class="date" id="date"></div></header>
 <section id="overview" class="page">
 <div class="comic-overview">
