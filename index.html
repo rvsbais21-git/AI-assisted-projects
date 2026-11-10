@@ -172,6 +172,14 @@ h1{font:900 clamp(42px,5vw,72px) 'Bebas Neue',Impact,sans-serif;letter-spacing:1
  .comic-panel-inner,.panel-directives .comic-panel-inner,.panel-calendar .comic-panel-inner{padding:19px!important}
  .comic-feature-value strong{font-size:46px!important}
 }
+</style><style id="dispatch-figure-background">
+#gameNewsPanel{position:relative;isolation:isolate;overflow:hidden}
+#gameNewsPanel:after{content:"";position:absolute;z-index:0;pointer-events:none;top:0;right:1%;bottom:0;width:min(52%,560px);background-image:url("./assets/dispatch-figure.svg");background-repeat:no-repeat;background-position:center right;background-size:contain;opacity:.34;mix-blend-mode:screen}
+#gameNewsPanel .comic-panel-inner{position:relative;z-index:1}
+#gameNewsPanel #gameNewsList{position:relative}
+#gameNewsPanel #gameNewsList>*{position:relative}
+@media(max-width:850px){#gameNewsPanel:after{right:-3%;width:65%;opacity:.2;background-position:center right}}
+@media(max-width:540px){#gameNewsPanel:after{right:-7%;width:78%;opacity:.14;background-position:center right}}
 </style></head><body><div class="shell"><aside class="side"><div class="brand">PURGATORY<span>.</span></div><div class="tag">PERSONAL OPERATING SYSTEM / 001</div><nav id="nav"><button class="active" data-page="overview"><b>00</b>Overview</button><button data-page="health"><b>01</b>Health</button><button data-page="academics"><b>02</b>Academics</button><button data-page="dsa"><b>03</b>DSA</button><button data-page="analytics"><b>04</b>Analytics</button><button data-page="settings"><b>05</b>Data</button></nav><div class="sidefoot">LOCAL BUILD // V0.2<br>DISCIPLINE IS A PRACTICE.<br>DATA STAYS IN THIS BROWSER.</div></aside><main class="main"><header class="top"><div><div class="eyebrow" id="crumb">SYSTEM / OVERVIEW</div><h1 id="title">Command Center</h1></div><div class="date" id="date"></div></header>
 <section id="overview" class="page">
 <div class="comic-overview">
