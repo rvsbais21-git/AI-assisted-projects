@@ -89,6 +89,51 @@ h1{font:900 clamp(42px,5vw,72px) 'Bebas Neue',Impact,sans-serif;letter-spacing:1
 @media(max-width:850px){.shell{grid-template-columns:1fr}.side{position:relative;height:auto;padding:14px;border:0;border-bottom:5px solid var(--red);box-shadow:0 4px 0 #eee}.brand{font-size:31px}nav{display:flex;overflow-x:auto;margin-top:12px;gap:5px}nav button{white-space:nowrap;padding:10px 14px}.sidefoot{display:none}.main{padding:18px 13px 45px}.top{padding:14px 17px}}
 @media(max-width:620px){.comic-stats{grid-template-columns:1fr 1fr;gap:9px}.comic-feature-grid,.comic-middle-grid,.comic-lower-grid{grid-template-columns:1fr}.comic-feature-grid .comic-panel-inner{min-height:185px;padding-right:28%}.panel-music{grid-column:auto}.comic-panel-inner{padding:17px}.comic-panel h2{font-size:29px}.comic-feature-value strong{font-size:48px}.comic-panel-heading{align-items:flex-start}.comic-link{font-size:9px}.comic-stat{padding:10px}.comic-stat .metric{font-size:31px}}
 @media(prefers-reduced-motion:reduce){*{scroll-behavior:auto!important;transition:none!important}}
+</style>
+<style id="comic-layout-refinement">
+/* Refine comic layout: calm panel interiors, inset content, readable metric hierarchy */
+.comic-stats{align-items:stretch}
+.comic-stat{display:grid;grid-template-columns:minmax(0,1fr) auto;grid-template-rows:auto 1fr auto;align-items:center;gap:2px 10px;min-height:96px;padding:12px 20px 12px 23px;clip-path:polygon(0 0,97% 0,100% 100%,3% 100%)}
+.comic-stat .label{grid-column:1/-1;grid-row:1;font-size:10px;letter-spacing:1.6px;line-height:1.4;white-space:normal}
+.comic-stat .metric{grid-column:1;grid-row:2/4;display:block!important;position:static!important;align-self:center;font:900 40px/1 'Bebas Neue',Impact,sans-serif!important;margin:0!important;padding:0!important;white-space:nowrap}
+.comic-stat small{grid-column:2;grid-row:2/4;align-self:center;text-align:right;font-size:9px;line-height:1.5;max-width:90px}
+.comic-panel{padding:4px;background:#f5f1f2;box-shadow:4px 4px 0 #050506,6px 6px 0 #a81731}
+.comic-panel:before{inset:4px;background:linear-gradient(145deg,#17171c 0%,#0b0b0e 75%);opacity:1}
+.comic-panel:after{content:"";position:absolute;z-index:0;top:5px;right:5px;width:26%;height:45%;pointer-events:none;opacity:.22;background:radial-gradient(#fff 1px,transparent 1.6px);background-size:8px 8px;mask-image:linear-gradient(135deg,#000,transparent 85%)}
+.comic-panel-inner{z-index:1;padding:26px 30px 24px;min-width:0}
+.comic-feature-grid .comic-panel-inner{min-height:235px;padding:27px 36% 25px 7%}
+.panel-academics .comic-panel-inner{padding:27px 34% 25px 7%}
+.comic-kicker{font-size:10px;letter-spacing:1.6px;line-height:1.5;margin-bottom:12px}
+.comic-panel h2{line-height:1.02;margin:0 0 15px;font-size:clamp(27px,2.8vw,38px)}
+.comic-feature-value{gap:12px;margin:14px 0}
+.comic-feature-value strong{display:block;line-height:.95}
+.comic-feature-value span{font-size:10px;line-height:1.5}
+.comic-panel p{max-width:58ch;line-height:1.6;margin:10px 0 0}
+.comic-art{width:28%;opacity:.18;background:linear-gradient(135deg,transparent 48%,#e7e1e4 49%,transparent 50%),linear-gradient(45deg,transparent 62%,#c51c3b 63%,transparent 64%);mask-image:linear-gradient(90deg,transparent,#000 50%)}
+.comic-art span{font-size:76px;opacity:.22}
+.panel-directives .comic-panel-inner,.panel-calendar .comic-panel-inner{padding:26px 34px 25px 7%}
+.panel-directives .comic-kicker,.panel-calendar .comic-kicker{margin-bottom:10px}
+.panel-directives h2,.panel-calendar h2{margin-bottom:15px}
+#todayTasks{min-height:88px;padding:16px 18px}
+.panel-dsa .comic-panel-inner,.panel-analytics .comic-panel-inner,.panel-music .comic-panel-inner,.panel-news .comic-panel-inner{padding:25px 30px 24px 7%}
+.panel-dsa,.panel-analytics,.panel-music,.panel-news{min-height:170px}
+.comic-panel .field{width:100%;max-width:100%;box-sizing:border-box;padding:11px}
+.comic-panel .btn{clip-path:none;transform:none;letter-spacing:.4px;padding:10px 13px}
+.comic-link{transform:none;line-height:1.35}
+.comic-panel .btn:hover,.comic-link:hover{transform:translateY(-1px)}
+.comic-panel .empty{padding:16px}
+@media(max-width:1100px){
+ .comic-feature-grid .comic-panel-inner,.panel-academics .comic-panel-inner{padding-right:30%;padding-left:7%}
+ .comic-middle-grid{grid-template-columns:1fr}
+}
+@media(max-width:620px){
+ .comic-stat{min-height:82px;padding:10px 12px}
+ .comic-stat .metric{font-size:34px!important}
+ .comic-stat small{font-size:8px}
+ .comic-feature-grid .comic-panel-inner,.panel-academics .comic-panel-inner{min-height:190px;padding:22px 28% 20px 7%}
+ .panel-directives .comic-panel-inner,.panel-calendar .comic-panel-inner,.panel-dsa .comic-panel-inner,.panel-analytics .comic-panel-inner,.panel-music .comic-panel-inner,.panel-news .comic-panel-inner{padding:21px 22px}
+ .comic-panel:after{width:22%;height:30%;background-size:7px 7px}
+}
 </style></head><body><div class="shell"><aside class="side"><div class="brand">PURGATORY<span>.</span></div><div class="tag">PERSONAL OPERATING SYSTEM / 001</div><nav id="nav"><button class="active" data-page="overview"><b>00</b>Overview</button><button data-page="health"><b>01</b>Health</button><button data-page="academics"><b>02</b>Academics</button><button data-page="dsa"><b>03</b>DSA</button><button data-page="analytics"><b>04</b>Analytics</button><button data-page="settings"><b>05</b>Data</button></nav><div class="sidefoot">LOCAL BUILD // V0.2<br>DISCIPLINE IS A PRACTICE.<br>DATA STAYS IN THIS BROWSER.</div></aside><main class="main"><header class="top"><div><div class="eyebrow" id="crumb">SYSTEM / OVERVIEW</div><h1 id="title">Command Center</h1></div><div class="date" id="date"></div></header>
 <section id="overview" class="page">
 <div class="comic-overview">
