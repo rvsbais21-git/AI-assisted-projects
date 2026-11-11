@@ -14,3 +14,11 @@ build/
 purgatory-backup-*.json
 .env
 .env.*
+
+# Android / Gradle
+.gradle/
+.kotlin/
+**/build/
+local.properties
+*.apk
+*.aab
