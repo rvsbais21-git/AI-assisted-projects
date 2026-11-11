@@ -62,6 +62,51 @@ h1 {
   text-shadow:2px 2px 0 rgba(165,20,47,.45);
 }
 
+
+/* Page-specific photographic heading panels. Existing layout and controls remain intact. */
+.main>.top,
+.page>.head{
+  position:relative;
+  isolation:isolate;
+  overflow:hidden;
+  background-color:#0b0b10;
+  border:1px solid rgba(225,205,195,.32);
+  border-left:3px solid var(--red);
+  padding:18px 22px;
+  min-height:104px;
+  background-repeat:no-repeat;
+  background-size:cover;
+  background-position:center;
+}
+.main>.top{margin-bottom:24px}
+.page>.head{margin:22px 0 12px}
+.main>.top>*,
+.page>.head>*{position:relative;z-index:1}
+.main[data-active-page="overview"]>.top{
+  background-image:linear-gradient(90deg,rgba(7,7,10,.94) 0%,rgba(7,7,10,.76) 48%,rgba(7,7,10,.28) 100%),url('assets/command-center.webp.jpeg');
+  background-position:center,center 44%;
+}
+#settings>.head{
+  background-image:linear-gradient(90deg,rgba(7,7,10,.95) 0%,rgba(7,7,10,.76) 55%,rgba(7,7,10,.28) 100%),url('assets/data-custody.webp.jpeg');
+  background-position:center,center 48%;
+}
+#health>.head{
+  background-image:linear-gradient(90deg,rgba(7,7,10,.95) 0%,rgba(7,7,10,.76) 55%,rgba(7,7,10,.28) 100%),url('assets/health-recovery.webp.jpeg');
+  background-position:center,center 48%;
+}
+#academics>.head{
+  background-image:linear-gradient(90deg,rgba(7,7,10,.95) 0%,rgba(7,7,10,.76) 55%,rgba(7,7,10,.28) 100%),url('assets/academic-campaign.webp.jpeg');
+  background-position:center,center 48%;
+}
+#analytics>.head{
+  background-image:linear-gradient(90deg,rgba(7,7,10,.95) 0%,rgba(7,7,10,.76) 55%,rgba(7,7,10,.28) 100%),url('assets/trend-analysis.webp.jpeg');
+  background-position:center,center 48%;
+}
+#dsa>.head{
+  background-image:linear-gradient(90deg,rgba(7,7,10,.95) 0%,rgba(7,7,10,.76) 55%,rgba(7,7,10,.28) 100%),url('assets/problem-solving.webp.jpeg');
+  background-position:center,center 48%;
+}
+
 </style>
 
 
@@ -382,7 +427,7 @@ h1{font:900 clamp(42px,5vw,72px) 'Bebas Neue',Impact,sans-serif;letter-spacing:1
   #spotifyPanel:before{background-size:100% 100%,cover !important;background-position:center,center !important}
 }
 </style>
-</head><body><div class="shell"><aside class="side"><div class="brand">PURGATORY<span>.</span></div><div class="tag">PERSONAL OPERATING SYSTEM / 001</div><nav id="nav"><button class="active" data-page="overview"><b>00</b>Overview</button><button data-page="health"><b>01</b>Health</button><button data-page="academics"><b>02</b>Academics</button><button data-page="dsa"><b>03</b>DSA</button><button data-page="analytics"><b>04</b>Analytics</button><button data-page="settings"><b>05</b>Data</button></nav><div class="sidefoot">LOCAL BUILD // V0.2<br>DISCIPLINE IS A PRACTICE.<br>DATA STAYS IN THIS BROWSER.</div></aside><main class="main"><header class="top"><div><div class="eyebrow" id="crumb">SYSTEM / OVERVIEW</div><h1 id="title">Command Center</h1></div><div class="date" id="date"></div></header>
+</head><body><div class="shell"><aside class="side"><div class="brand">PURGATORY<span>.</span></div><div class="tag">PERSONAL OPERATING SYSTEM / 001</div><nav id="nav"><button class="active" data-page="overview"><b>00</b>Overview</button><button data-page="health"><b>01</b>Health</button><button data-page="academics"><b>02</b>Academics</button><button data-page="dsa"><b>03</b>DSA</button><button data-page="analytics"><b>04</b>Analytics</button><button data-page="settings"><b>05</b>Data</button></nav><div class="sidefoot">LOCAL BUILD // V0.2<br>DISCIPLINE IS A PRACTICE.<br>DATA STAYS IN THIS BROWSER.</div></aside><main class="main" data-active-page="overview"><header class="top"><div><div class="eyebrow" id="crumb">SYSTEM / OVERVIEW</div><h1 id="title">Command Center</h1></div><div class="date" id="date"></div></header>
 <section id="overview" class="page">
 <div class="comic-overview">
   <div class="comic-stats">
@@ -493,7 +538,7 @@ function renderTrainingStats(){
 function renderAll(){renderHabits();renderSubjects();renderExamSchedule();renderTasks();$('workHistory').innerHTML=table(db.workouts.slice().reverse(),[['DATE',x=>fmt(x.date)],['DAY',x=>x.day],['EXERCISES',x=>x.exercises.map(e=>e.name+' ('+e.total+')').join(', ')],['NOTE',x=>x.note]]);$('problems').innerHTML=table(db.problems.slice().reverse(),[['DATE',x=>fmt(x.date)],['PROBLEM',x=>x.name],['TOPIC',x=>x.topic],['PLATFORM',x=>x.platform],['RESULT',x=>x.result]]);$('contests').innerHTML=table(db.contests.slice().reverse(),[['DATE',x=>fmt(x.date)],['CONTEST',x=>x.name],['SOLVED',x=>x.solved]]);
 let week=new Date();week.setDate(week.getDate()-6);let start=week.toISOString().slice(0,10),ws=db.workouts.filter(w=>w.date>=start);$('mTrain').textContent=ws.length;$('mTasks').textContent=db.tasks.filter(t=>t.date>=start&&t.done).length;let hc=Object.values(db.habits[today]||{}).filter(Boolean).length;$('mHabits').textContent=hc+'/4';let exams=db.subjects.filter(s=>s.exam&&s.exam>=today).sort((a,b)=>a.exam.localeCompare(b.exam));let examDays=exams.length?Math.ceil((new Date(exams[0].exam+'T00:00:00')-new Date(today+'T00:00:00'))/86400000):null;$('mExam').textContent=examDays===null?'—':examDays===0?'TODAY':examDays+'d';$('mExamName').textContent=exams.length?exams[0].name.toUpperCase()+' · '+fmt(exams[0].exam).toUpperCase():'NO EXAM SCHEDULED';let topics=db.subjects.flatMap(s=>s.topics),pct=topics.length?Math.round(topics.filter(t=>t.done).length/topics.length*100):0;$('completion').textContent=pct+'%';$('completionBar').style.width=pct+'%';let todays=db.tasks.filter(t=>t.date===today);$('todayTasks').innerHTML=todays.length?todays.map(t=>'<div class="task '+(t.done?'done':'')+'"><span>'+(t.done?'✓':'○')+'</span>'+esc(t.name)+'</div>').join(''):'<div class="empty">No tasks added for today.</div>';
 let daily=Object.entries(db.daily).sort((a,b)=>a[0].localeCompare(b[0]));renderTrainingStats();stats('sleepStats',daily.filter(x=>x[1].sleep!=null).slice(-10).map(x=>({label:x[0],value:x[1].sleep+' h'})));stats('weightStats',daily.filter(x=>x[1].weight!=null).slice(-10).map(x=>({label:x[0],value:x[1].weight+' kg'})));stats('academicStats',db.subjects.map(s=>({label:s.name,value:(s.topics.length?Math.round(s.topics.filter(t=>t.done).length/s.topics.length*100):0)+'%'})));$('recordCount').textContent=db.workouts.length+daily.length+Object.keys(db.habits).length+db.subjects.length+db.tasks.length+db.problems.length+db.contests.length}
-$('nav').querySelectorAll('button').forEach(b=>b.onclick=()=>{document.querySelectorAll('nav button').forEach(x=>x.classList.remove('active'));b.classList.add('active');document.querySelectorAll('.page').forEach(x=>x.classList.add('hidden'));$(b.dataset.page).classList.remove('hidden');$('crumb').textContent='SYSTEM / '+b.dataset.page.toUpperCase();$('title').textContent=({overview:'Command Center',health:'Health & Recovery',academics:'Academic Campaign',dsa:'Problem-Solving Ledger',analytics:'Trend Analysis',settings:'Data Custody'})[b.dataset.page]});
+$('nav').querySelectorAll('button').forEach(b=>b.onclick=()=>{document.querySelectorAll('nav button').forEach(x=>x.classList.remove('active'));b.classList.add('active');document.querySelectorAll('.page').forEach(x=>x.classList.add('hidden'));$(b.dataset.page).classList.remove('hidden');document.querySelector('.main').dataset.activePage=b.dataset.page;$('crumb').textContent='SYSTEM / '+b.dataset.page.toUpperCase();$('title').textContent=({overview:'Command Center',health:'Health & Recovery',academics:'Academic Campaign',dsa:'Problem-Solving Ledger',analytics:'Trend Analysis',settings:'Data Custody'})[b.dataset.page]});
 document.querySelectorAll('.comic-overview [data-page]').forEach(b=>b.onclick=()=>{const target=document.querySelector('#nav [data-page="'+b.dataset.page+'"]');if(target)target.click()});
 const openExamSchedule=()=>{const target=document.querySelector('#nav [data-page="academics"]');if(target)target.click();$('examSubject').focus()};$('nextExamCard').onclick=openExamSchedule;$('nextExamCard').onkeydown=e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();openExamSchedule()}};
 $('export').onclick=()=>{let a=document.createElement('a'),blob=new Blob([JSON.stringify({version:1,data:db},null,2)],{type:'application/json'});a.href=URL.createObjectURL(blob);a.download='purgatory-backup-'+today+'.json';a.click();URL.revokeObjectURL(a.href)};
