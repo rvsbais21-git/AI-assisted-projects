@@ -107,6 +107,58 @@ h1 {
   background-position:center,center 48%;
 }
 
+
+/* Correct placement: artwork belongs in the topmost global page-title header. */
+.main>.top{
+  position:relative;
+  isolation:isolate;
+  overflow:hidden;
+  background-color:#0b0b10;
+  border:1px solid rgba(225,205,195,.32);
+  border-left:3px solid var(--red);
+  padding:18px 22px;
+  min-height:104px;
+  margin-bottom:24px;
+  background-repeat:no-repeat;
+  background-size:cover;
+  background-position:center;
+}
+.main>.top>*{position:relative;z-index:1}
+.page>.head{
+  background-image:none !important;
+  background-color:transparent !important;
+  border:0 !important;
+  padding:0 !important;
+  min-height:0 !important;
+  overflow:visible !important;
+  margin:22px 0 12px !important;
+  position:static !important;
+}
+.main[data-active-page="overview"]>.top{
+  background-image:linear-gradient(90deg,rgba(7,7,10,.94) 0%,rgba(7,7,10,.76) 48%,rgba(7,7,10,.28) 100%),url('assets/command-center.webp.jpeg');
+  background-position:center,center 44%;
+}
+.main[data-active-page="settings"]>.top{
+  background-image:linear-gradient(90deg,rgba(7,7,10,.95) 0%,rgba(7,7,10,.76) 55%,rgba(7,7,10,.28) 100%),url('assets/data-custody.webp.jpeg');
+  background-position:center,center 48%;
+}
+.main[data-active-page="health"]>.top{
+  background-image:linear-gradient(90deg,rgba(7,7,10,.95) 0%,rgba(7,7,10,.76) 55%,rgba(7,7,10,.28) 100%),url('assets/health-recovery.webp.jpeg');
+  background-position:center,center 48%;
+}
+.main[data-active-page="academics"]>.top{
+  background-image:linear-gradient(90deg,rgba(7,7,10,.95) 0%,rgba(7,7,10,.76) 55%,rgba(7,7,10,.28) 100%),url('assets/academic-campaign.webp.jpeg');
+  background-position:center,center 48%;
+}
+.main[data-active-page="analytics"]>.top{
+  background-image:linear-gradient(90deg,rgba(7,7,10,.95) 0%,rgba(7,7,10,.76) 55%,rgba(7,7,10,.28) 100%),url('assets/trend-analysis.webp.jpeg');
+  background-position:center,center 48%;
+}
+.main[data-active-page="dsa"]>.top{
+  background-image:linear-gradient(90deg,rgba(7,7,10,.95) 0%,rgba(7,7,10,.76) 55%,rgba(7,7,10,.28) 100%),url('assets/problem-solving.webp.jpeg');
+  background-position:center,center 48%;
+}
+
 </style>
 
 
