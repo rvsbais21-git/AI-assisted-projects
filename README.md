@@ -1,71 +1,140 @@
+<!-- PURGATORY — repository landing page -->
+
+<div align="center">
+
 # PURGATORY
 
-A manga-inspired, local-first personal development dashboard for tracking health, academics, DSA practice, and long-term trends.
+### YOUR LIFE. YOUR SYSTEM. YOUR RECORD.
 
-> Current status: early prototype (v0.2). Built as a learning project with AI assistance.
+A manga-inspired personal dashboard for bringing training, academics, problem-solving, and personal data into one place.
 
-## Features
+[**Open the live dashboard ↗**](https://rvsbais21-git.github.io/AI-assisted-projects/)
 
-- Dark manga-inspired interface with crimson accents
-- Health logging: workouts, exercises, repetitions, hydration, protein, sleep, body measurements, screen time, and daily habits
-- Academic tracker with subjects, exam dates, modules, subtopics, completion checklists, and daily tasks
-- DSA problem-solving and contest ledger
-- Basic trend summaries for training, sleep, weight, and academic progress
-- JSON export/import for manual backups
-- Responsive layout for desktop and mobile screens
+<br/>
 
-The app starts with an empty academic tracker. Add your subjects, modules, and subtopics in the Academics section.
+![Status](https://img.shields.io/badge/status-active%20prototype-c52e48?style=flat-square)
+![Built with](https://img.shields.io/badge/built%20with-HTML%20%2F%20CSS%20%2F%20JavaScript-171717?style=flat-square)
+![Storage](https://img.shields.io/badge/storage-browser%20localStorage-171717?style=flat-square)
+![Hosting](https://img.shields.io/badge/hosted%20on-GitHub%20Pages-171717?style=flat-square)
 
-## Run locally
+</div>
 
-This is a standalone HTML/CSS/JavaScript prototype. No build step is required.
+---
 
-1. Clone or download this repository.
-2. Open a terminal in the project folder.
-3. Start a local server:
+## Overview
 
-   ```bash
-   python -m http.server 8000
-   ```
+PURGATORY is a personal tracking workspace built around a simple idea: **make progress visible, keep records under your control, and reduce the friction between intention and action.**
 
-4. Open <http://localhost:8000>.
+It brings several parts of a personal routine into one interface. The visual direction takes cues from manga panels, using a restrained black, white, and crimson palette.
 
-You can also open `index.html` directly in a browser, although using a local server is preferable.
+> This repository currently contains a working, single-page prototype. It is a personal learning project—not a production-ready health, academic, or data-management platform.
 
-## Data storage and privacy
+## The workspace
 
-Records are stored in the browser's `localStorage` for the current browser profile and device.
+| Area | What it does |
+| --- | --- |
+| **Overview** | A central dashboard for the main sections of the workspace. |
+| **Health** | Record training sessions, exercises, habits, and health-related daily metrics. |
+| **Academics** | Organise subjects, modules, subtopics, exam schedules, and tasks. |
+| **DSA** | Maintain a problem-solving and contest practice ledger. |
+| **Analytics** | Review available progress summaries and trends. |
+| **Data** | Manage the browser-held records and use JSON export/import for manual backups. |
 
-- Data is not synchronized across devices.
-- Data is not encrypted in this prototype.
-- Clearing browser storage can delete records.
-- Use the built-in JSON export feature to create backups.
-- Do not enter sensitive personal information on a shared or public device.
+## Interface direction
 
-## Current limitations
+The interface is intentionally built around:
 
-- This is an early prototype, not a production-ready personal data system.
-- The weekly training split is not yet configurable as a reusable template.
-- Analytics are basic summaries; advanced weekly/monthly aggregation and progression analysis remain future work.
-- The current storage layer is `localStorage`, not IndexedDB.
-- There is no authentication, encrypted sync, or cloud backend.
-- Automated tests and schema migrations are not yet implemented.
+- A dark, high-contrast canvas with crimson accents.
+- Manga-inspired artwork across the main section headers.
+- Condensed display typography paired with readable body text and monospaced labels.
+- Rectangular panels and a consistent dashboard grid.
+- Responsive layouts for desktop and smaller screens.
 
-## Roadmap
+Artwork is stored in `assets/` and referenced by the application.
 
-- [ ] Configurable weekly training split and reusable exercise templates
-- [ ] More complete weekly and monthly analytics
-- [ ] Expanded nutrition and body-measurement tracking
-- [ ] Academic completion velocity and exam countdown improvements
-- [ ] IndexedDB persistence and schema migrations
-- [ ] Automated tests and validation
-- [ ] Optional encrypted synchronization between personal devices
-- [ ] React + TypeScript application architecture
+## Run it locally
 
-## Tech note
+There is no build step or dependency installation required.
 
-The current prototype is a single-page HTML/CSS/JavaScript application. The longer-term target stack is React, TypeScript, Tailwind CSS, Dexie/IndexedDB, and Recharts.
+```bash
+git clone https://github.com/rvsbais21-git/AI-assisted-projects.git
+cd AI-assisted-projects
+python -m http.server 8000
+```
+
+Open [http://localhost:8000](http://localhost:8000).
+
+You can also open `index.html` directly, but a local server is the more reliable option.
+
+## Project structure
+
+```text
+AI-assisted-projects/
+├── assets/       # Manga artwork and interface backgrounds
+├── index.html    # Application markup, styles, and client-side logic
+├── README.md     # Project overview and setup guide
+└── .gitignore    # Editor files, build output, and local data exclusions
+```
+
+The current application is intentionally lightweight: HTML, CSS, and vanilla JavaScript in a single page. The repository does not currently use a package manager, framework, bundler, or backend.
+
+## Data, storage, and privacy
+
+PURGATORY currently stores records in the browser's `localStorage`.
+
+- Records belong to the browser profile and device where they were entered.
+- There is no account system, cloud database, or cross-device synchronisation.
+- Data is not encrypted by the application.
+- Clearing browser storage may permanently remove locally stored records.
+- Use the JSON export function to keep your own backups.
+- Avoid entering sensitive information, especially on shared devices.
+
+**Local-first does not mean automatically backed up.** Keep an independent copy of your exported data.
+
+## Current scope
+
+The live prototype is functional, but it is not feature-complete. In particular:
+
+- Analytics are limited to the summaries currently implemented in the interface.
+- There is no automated test suite or data-schema migration system.
+- There is no authentication, encrypted sync, or remote persistence.
+- The current persistence layer is `localStorage`; IndexedDB is not implemented.
+- The interface and data model may change as the project evolves.
+
+## Development direction
+
+The next meaningful improvements are:
+
+- [ ] Strengthen input validation and failure feedback.
+- [ ] Add automated tests for critical data and navigation flows.
+- [ ] Improve analytics and time-based summaries.
+- [ ] Introduce a versioned data model and safe migrations.
+- [ ] Evaluate IndexedDB for larger local datasets.
+- [ ] Consider optional, privacy-conscious synchronisation only after the local data layer is reliable.
+
+These are plans, not claims about existing functionality.
+
+## Contributing
+
+This is currently a personal project. If you spot a reproducible issue, open a GitHub issue with:
+
+1. The section where it occurred.
+2. The steps needed to reproduce it.
+3. What you expected to happen.
+4. What happened instead.
+
+Please do not include personal records or private exported data in an issue.
 
 ## License
 
-No license has been added yet. All rights reserved by the author unless a license is added in a future commit.
+No open-source license has been added. Unless a license is introduced, the source remains subject to the author's default copyright; reuse and redistribution are not granted by this README.
+
+---
+
+<div align="center">
+
+**PURGATORY** · Built to make consistency observable.
+
+<sub>Designed and developed as an ongoing personal project.</sub>
+
+</div>
