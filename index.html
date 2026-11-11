@@ -373,4 +373,28 @@ $('saveSpotifyUrl').onclick=()=>{const url=spotifyEmbedUrl($('spotifyUrlInput').
 $('clearSpotifyUrl').onclick=()=>{localStorage.removeItem('purgatorySpotifyEmbedUrl');$('spotifyUrlInput').value='';$('spotifyFrame').src='';loadSpotifyEmbed()};
 $('changeSpotifyUrl').onclick=()=>{$('spotifySetup').style.display='block';$('spotifyPlayerWrap').style.display='none'};
 renderAll();loadCalendarEmbed();loadSpotifyEmbed();initResources();loadGameNews();
-</script></body></html>
+</script>
+<style id="purgatory-image-backgrounds-final">
+/* Must follow the comic theme: its .comic-panel:before background shorthand otherwise replaces these images. */
+.comic-panel.panel-dsa:before{
+  background-image:
+    linear-gradient(90deg,rgba(8,8,11,.88) 0%,rgba(8,8,11,.54) 58%,rgba(8,8,11,.30) 100%),
+    url('./assets/dsa-bg.webp');
+  background-size:100% 100%,cover;
+  background-position:center,center 36%;
+  background-repeat:no-repeat;
+  opacity:1;
+}
+.comic-panel.panel-news:before{
+  background-image:
+    linear-gradient(90deg,rgba(8,8,11,.96) 0%,rgba(8,8,11,.88) 48%,rgba(8,8,11,.48) 100%),
+    url('./assets/dispatch-bg.webp');
+  background-size:100% 100%,contain;
+  background-position:center,right center;
+  background-repeat:no-repeat;
+  background-color:#08080b;
+  opacity:1;
+}
+</style>
+
+</body></html>
