@@ -279,6 +279,51 @@ h1{font:900 clamp(42px,5vw,72px) 'Bebas Neue',Impact,sans-serif;letter-spacing:1
   }
 }
 </style>
+<style id="purgatory-overview-card-backgrounds">
+/* Overview card artwork. Keep each card's content and controls above the image. */
+.panel-academics:before,
+.panel-calendar:before,
+#analyticsOverviewPanel:before,
+#spotifyPanel:before{
+  content:"" !important;
+  position:absolute !important;
+  inset:4px !important;
+  z-index:-1 !important;
+  background-repeat:no-repeat !important;
+  background-size:100% 100%,cover !important;
+  opacity:1 !important;
+}
+.panel-academics:before{
+  background-image:linear-gradient(90deg,rgba(8,8,11,.90),rgba(8,8,11,.62) 65%,rgba(8,8,11,.40)),url('./assets/academics-bg.png.jpeg') !important;
+  background-position:center,center 38% !important;
+}
+.panel-calendar:before{
+  background-image:linear-gradient(90deg,rgba(8,8,11,.90),rgba(8,8,11,.70) 68%,rgba(8,8,11,.48)),url('./assets/%20calendar-bg.png.jpeg') !important;
+  background-position:center,center 40% !important;
+}
+#analyticsOverviewPanel:before{
+  background-image:linear-gradient(90deg,rgba(8,8,11,.90),rgba(8,8,11,.65) 68%,rgba(8,8,11,.42)),url('./assets/%20analytics-bg.png.jpeg') !important;
+  background-position:center,center 38% !important;
+}
+#spotifyPanel:before{
+  background-image:linear-gradient(90deg,rgba(8,8,11,.92),rgba(8,8,11,.76) 68%,rgba(8,8,11,.54)),url('./assets/music-bg.png.jpeg') !important;
+  background-position:center,center 42% !important;
+}
+.panel-academics .comic-art{display:none !important}
+.panel-academics .comic-panel-inner,
+.panel-calendar .comic-panel-inner,
+#analyticsOverviewPanel .comic-panel-inner,
+#spotifyPanel .comic-panel-inner{
+  position:relative !important;
+  z-index:1 !important;
+}
+@media(max-width:700px){
+  .panel-academics:before,
+  .panel-calendar:before,
+  #analyticsOverviewPanel:before,
+  #spotifyPanel:before{background-size:100% 100%,cover !important;background-position:center,center !important}
+}
+</style>
 </head><body><div class="shell"><aside class="side"><div class="brand">PURGATORY<span>.</span></div><div class="tag">PERSONAL OPERATING SYSTEM / 001</div><nav id="nav"><button class="active" data-page="overview"><b>00</b>Overview</button><button data-page="health"><b>01</b>Health</button><button data-page="academics"><b>02</b>Academics</button><button data-page="dsa"><b>03</b>DSA</button><button data-page="analytics"><b>04</b>Analytics</button><button data-page="settings"><b>05</b>Data</button></nav><div class="sidefoot">LOCAL BUILD // V0.2<br>DISCIPLINE IS A PRACTICE.<br>DATA STAYS IN THIS BROWSER.</div></aside><main class="main"><header class="top"><div><div class="eyebrow" id="crumb">SYSTEM / OVERVIEW</div><h1 id="title">Command Center</h1></div><div class="date" id="date"></div></header>
 <section id="overview" class="page">
 <div class="comic-overview">
@@ -335,7 +380,7 @@ h1{font:900 clamp(42px,5vw,72px) 'Bebas Neue',Impact,sans-serif;letter-spacing:1
   </div>
   <div class="comic-lower-grid">
     <article class="comic-panel panel-dsa"><img class="panel-art panel-art-dsa" src="./assets/dsa-bg.webp" alt="" aria-hidden="true"><div class="comic-panel-inner"><div class="comic-kicker">05 / PROBLEM SOLVING</div><h2>DSA</h2><p>Practice. Review. Repeat.</p><button class="btn" data-page="dsa">OPEN DSA LEDGER ↗</button></div></article>
-    <article class="comic-panel panel-analytics"><div class="comic-panel-inner"><div class="comic-kicker">06 / PERFORMANCE</div><h2>ANALYTICS</h2><p>Measure the work. Understand the trend.</p><button class="btn" data-page="analytics">VIEW ANALYTICS ↗</button></div></article>
+    <article class="comic-panel panel-analytics" id="analyticsOverviewPanel"><div class="comic-panel-inner"><div class="comic-kicker">06 / PERFORMANCE</div><h2>ANALYTICS</h2><p>Measure the work. Understand the trend.</p><button class="btn" data-page="analytics">VIEW ANALYTICS ↗</button></div></article>
     <article class="comic-panel panel-music" id="spotifyPanel">
       <div class="comic-panel-inner"><div class="comic-kicker">07 / FOCUS MODE</div><h2>MUSIC</h2><p>Focus soundtrack</p><a class="comic-link" href="https://open.spotify.com/" target="_blank" rel="noopener">OPEN SPOTIFY ↗</a>
       <div id="spotifySetup"><label>SPOTIFY SHARE LINK<input id="spotifyUrlInput" class="field" type="url" placeholder="https://open.spotify.com/playlist/…"></label><div class="row" style="margin-top:10px"><button class="btn primary" id="saveSpotifyUrl">LOAD PLAYER</button><button class="btn" id="clearSpotifyUrl">CLEAR</button></div><p class="note">Playback and account restrictions are controlled by Spotify.</p></div>
