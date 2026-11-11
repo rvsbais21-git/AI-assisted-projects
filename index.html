@@ -252,6 +252,33 @@ h1{font:900 clamp(42px,5vw,72px) 'Bebas Neue',Impact,sans-serif;letter-spacing:1
   }
 }
 </style>
+<style id="purgatory-health-training-background">
+/* Full-panel background artwork for the Overview Health / Training card. */
+.panel-training:before{
+  content:"" !important;
+  position:absolute !important;
+  inset:4px !important;
+  z-index:-1 !important;
+  background-image:
+    linear-gradient(90deg,rgba(8,8,11,.88) 0%,rgba(8,8,11,.68) 48%,rgba(8,8,11,.42) 100%),
+    url('./assets/health-training-bg.png.jpeg') !important;
+  background-size:100% 100%,cover !important;
+  background-position:center,center 38% !important;
+  background-repeat:no-repeat !important;
+  opacity:1 !important;
+}
+.panel-training .comic-art{display:none !important}
+.panel-training .comic-panel-inner{position:relative;z-index:1}
+@media(max-width:700px){
+  .panel-training:before{
+    background-image:
+      linear-gradient(90deg,rgba(8,8,11,.90) 0%,rgba(8,8,11,.72) 58%,rgba(8,8,11,.48) 100%),
+      url('./assets/health-training-bg.png.jpeg') !important;
+    background-size:100% 100%,cover !important;
+    background-position:center,center 35% !important;
+  }
+}
+</style>
 </head><body><div class="shell"><aside class="side"><div class="brand">PURGATORY<span>.</span></div><div class="tag">PERSONAL OPERATING SYSTEM / 001</div><nav id="nav"><button class="active" data-page="overview"><b>00</b>Overview</button><button data-page="health"><b>01</b>Health</button><button data-page="academics"><b>02</b>Academics</button><button data-page="dsa"><b>03</b>DSA</button><button data-page="analytics"><b>04</b>Analytics</button><button data-page="settings"><b>05</b>Data</button></nav><div class="sidefoot">LOCAL BUILD // V0.2<br>DISCIPLINE IS A PRACTICE.<br>DATA STAYS IN THIS BROWSER.</div></aside><main class="main"><header class="top"><div><div class="eyebrow" id="crumb">SYSTEM / OVERVIEW</div><h1 id="title">Command Center</h1></div><div class="date" id="date"></div></header>
 <section id="overview" class="page">
 <div class="comic-overview">
