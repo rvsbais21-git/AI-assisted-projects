@@ -282,7 +282,7 @@ h1{font:900 clamp(42px,5vw,72px) 'Bebas Neue',Impact,sans-serif;letter-spacing:1
     </article>
   </div>
   <div class="comic-lower-grid">
-    <article class="comic-panel panel-dsa"><div class="comic-panel-inner"><div class="comic-kicker">05 / PROBLEM SOLVING</div><h2>DSA</h2><p>Practice. Review. Repeat.</p><button class="btn" data-page="dsa">OPEN DSA LEDGER ↗</button></div></article>
+    <article class="comic-panel panel-dsa"><img class="panel-art panel-art-dsa" src="./assets/dsa-bg.webp" alt="" aria-hidden="true"><div class="comic-panel-inner"><div class="comic-kicker">05 / PROBLEM SOLVING</div><h2>DSA</h2><p>Practice. Review. Repeat.</p><button class="btn" data-page="dsa">OPEN DSA LEDGER ↗</button></div></article>
     <article class="comic-panel panel-analytics"><div class="comic-panel-inner"><div class="comic-kicker">06 / PERFORMANCE</div><h2>ANALYTICS</h2><p>Measure the work. Understand the trend.</p><button class="btn" data-page="analytics">VIEW ANALYTICS ↗</button></div></article>
     <article class="comic-panel panel-music" id="spotifyPanel">
       <div class="comic-panel-inner"><div class="comic-kicker">07 / FOCUS MODE</div><h2>MUSIC</h2><p>Focus soundtrack</p><a class="comic-link" href="https://open.spotify.com/" target="_blank" rel="noopener">OPEN SPOTIFY ↗</a>
@@ -291,7 +291,7 @@ h1{font:900 clamp(42px,5vw,72px) 'Bebas Neue',Impact,sans-serif;letter-spacing:1
       </div>
     </article>
   </div>
-  <article class="comic-panel panel-news" id="gameNewsPanel"><div class="comic-panel-inner"><div class="comic-kicker">08 / INDUSTRY INTELLIGENCE</div><div class="comic-panel-heading"><h2>DEVELOPER DISPATCH</h2><button class="btn" id="refreshGameNews">REFRESH FEED ↻</button></div><div class="row" style="gap:8px;margin-bottom:12px"><span class="pill">GAME DEVELOPMENT</span><span class="pill">UNREAL ENGINE</span><span class="pill">GODOT</span></div><div id="gameNewsStatus" class="note" style="margin-bottom:10px">Loading latest stories…</div><div id="gameNewsList"><div class="empty">Fetching game development news…</div></div><p class="note">Headlines and excerpts are fetched from public RSS feeds. Articles open on their original publisher websites.</p></div></article>
+  <article class="comic-panel panel-news" id="gameNewsPanel"><img class="panel-art panel-art-dispatch" src="./assets/dispatch-bg.webp" alt="" aria-hidden="true"><div class="comic-panel-inner"><div class="comic-kicker">08 / INDUSTRY INTELLIGENCE</div><div class="comic-panel-heading"><h2>DEVELOPER DISPATCH</h2><button class="btn" id="refreshGameNews">REFRESH FEED ↻</button></div><div class="row" style="gap:8px;margin-bottom:12px"><span class="pill">GAME DEVELOPMENT</span><span class="pill">UNREAL ENGINE</span><span class="pill">GODOT</span></div><div id="gameNewsStatus" class="note" style="margin-bottom:10px">Loading latest stories…</div><div id="gameNewsList"><div class="empty">Fetching game development news…</div></div><p class="note">Headlines and excerpts are fetched from public RSS feeds. Articles open on their original publisher websites.</p></div></article>
 </div>
 </section>
 <section id="health" class="page hidden"><div class="head"><h2>Training log</h2><span class="pill">HEALTH / RECOVERY</span></div><div class="grid"><div class="card s4"><h2 class="paneltitle">Session details</h2><div class="form"><label>Date<input class="field" id="wDate" type="date"></label><label>Training day<select class="field" id="wDay"><option>Push</option><option>Pull</option><option>Legs</option><option>Upper</option><option>Lower</option><option>Full body</option><option>Cardio</option><option>Rest</option></select></label><label>Note<input class="field" id="wNote" placeholder="Session note"></label></div><button class="btn primary" id="saveWorkout">SAVE SESSION</button></div><div class="card s8"><h2 class="paneltitle">Exercises</h2><div class="tablewrap"><table><thead><tr><th>EXERCISE</th><th>SETS / VALUE (5+5+3)</th><th>MEASURE</th><th>LOAD</th><th>TOTAL</th><th></th></tr></thead><tbody id="exRows"></tbody></table></div><div class="row" style="margin-top:10px"><button class="btn" id="addEx">+ ADD EXERCISE</button><button class="btn" id="newExercise">+ NEW EXERCISE</button></div><p class="note">Select an exercise, enter sets separated by +, choose the measure, and optionally add weight. Examples: 5+5+3 reps · 30+30 seconds · 5 minutes · attendance.</p></div><div class="card s6"><h2 class="paneltitle">Daily health record</h2><div class="form"><label>Water (L)<input class="field" id="water" type="number" step=".1"></label><label>Protein (g)<input class="field" id="protein" type="number"></label><label>Sleep (hours)<input class="field" id="sleep" type="number" step=".1"></label><label>Weight (kg)<input class="field" id="weight" type="number" step=".1"></label><label>Waist (cm)<input class="field" id="waist" type="number" step=".1"></label><label>Screen time (h)<input class="field" id="screen" type="number" step=".1"></label></div><button class="btn primary" id="saveDaily">SAVE DAILY RECORD</button></div><div class="card s6"><h2 class="paneltitle">Daily habits</h2><div id="habits"></div><p class="note">Reading, coding, training, and sleep routine.</p></div><div class="card s12"><h2 class="paneltitle">Session history</h2><div id="workHistory"></div></div></div></section>
@@ -394,6 +394,46 @@ renderAll();loadCalendarEmbed();loadSpotifyEmbed();initResources();loadGameNews(
   background-repeat:no-repeat;
   background-color:#08080b;
   opacity:1;
+}
+</style>
+
+
+<style id="purgatory-panel-art-elements">
+/* Use real image elements so theme pseudo-element backgrounds cannot override artwork. */
+.comic-panel .panel-art{
+  position:absolute;
+  display:block;
+  pointer-events:none;
+  user-select:none;
+  max-width:none;
+}
+.comic-panel.panel-dsa .panel-art-dsa{
+  inset:0;
+  width:100%;
+  height:100%;
+  object-fit:cover;
+  object-position:center 36%;
+  opacity:.48;
+  z-index:0;
+}
+.comic-panel.panel-news .panel-art-dispatch{
+  top:0;
+  right:0;
+  width:100%;
+  height:100%;
+  object-fit:contain;
+  object-position:right center;
+  opacity:1;
+  z-index:0;
+}
+.comic-panel.panel-dsa .comic-panel-inner,
+.comic-panel.panel-news .comic-panel-inner{
+  position:relative;
+  z-index:1;
+  text-shadow:0 1px 3px #000,0 0 8px #000;
+}
+.comic-panel.panel-news .comic-panel-inner{
+  background:linear-gradient(90deg,rgba(8,8,11,.96) 0%,rgba(8,8,11,.82) 43%,rgba(8,8,11,.10) 100%);
 }
 </style>
 
