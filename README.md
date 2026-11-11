@@ -78,6 +78,16 @@ AI-assisted-projects/
 
 The current application is intentionally lightweight: HTML, CSS, and vanilla JavaScript in a single page. The repository does not currently use a package manager, framework, bundler, or backend.
 
+## Android Health Connect bridge
+
+The `android/` directory contains a small Kotlin companion app. It requests read-only access to selected Health Connect data (steps, sleep sessions, exercise sessions, heart-rate samples, and weight), then exports a JSON snapshot through Android's file picker.
+
+To build and test it, open the `android/` directory in Android Studio and run the `app` configuration on a compatible Android device. See [the companion setup guide](android/README.md).
+
+The dashboard's **Data → Health Connect Import** panel validates the export, previews record counts, skips duplicate records, updates daily step totals, and stores imported data separately from manually entered health records. Imported summaries appear in the Health section.
+
+The first version uses an explicit file transfer; it does not perform background or cloud synchronisation. Health data stays on the device and in the browser's local storage unless the user chooses to move the export file elsewhere. The companion does not request network access.
+
 ## Data, storage, and privacy
 
 PURGATORY currently stores records in the browser's `localStorage`.
@@ -110,7 +120,7 @@ The next meaningful improvements are:
 - [ ] Improve analytics and time-based summaries.
 - [ ] Introduce a versioned data model and safe migrations.
 - [ ] Evaluate IndexedDB for larger local datasets.
-- [ ] Consider optional, privacy-conscious synchronisation only after the local data layer is reliable.
+- [ ] Test the Android companion on a real device and validate data from multiple Health Connect providers.\n- [ ] Consider optional, privacy-conscious synchronisation only after the local data layer is reliable.
 
 These are plans, not claims about existing functionality.
 
