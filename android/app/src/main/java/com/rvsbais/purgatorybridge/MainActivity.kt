@@ -15,7 +15,7 @@ import androidx.health.connect.client.HealthConnectClient
 import androidx.health.connect.client.PermissionController
 import androidx.health.connect.client.permission.HealthPermission
 import androidx.health.connect.client.records.*
-import androidx.health.connect.client.request.ReadRecordsRequest
+import androidx.health.connect.client.request.AggregateGroupByPeriodRequest\nimport androidx.health.connect.client.request.ReadRecordsRequest
 import androidx.health.connect.client.time.TimeRangeFilter
 import androidx.lifecycle.lifecycleScope
 import kotlinx.coroutines.launch
@@ -207,10 +207,19 @@ class MainActivity : ComponentActivity() {
                 val records = JSONArray()
 
                 if (HealthPermission.getReadPermission(StepsRecord::class) in granted) {
-                    val steps = readRecordsSince<StepsRecord>(client, start, end)
-                    val byDay = steps.groupBy { it.startTime.atZone(zone).toLocalDate().toString() }
-                    byDay.forEach { (date, dayRecords) ->
-                        val total = dayRecords.sumOf { it.count }
+                    // Aggregate by calendar day: Health Connect resolves overlapping source records.
+                    val localStart = LocalDate.now(zone).minusDays(29).atStartOfDay()
+                    val localEnd = LocalDateTime.now(zone)
+                    val dailySteps = client.aggregateGroupByPeriod(
+                        AggregateGroupByPeriodRequest(
+                            metrics = setOf(StepsRecord.COUNT_TOTAL),
+                            timeRangeFilter = TimeRangeFilter.between(localStart, localEnd),
+                            timeRangeSlicer = Period.ofDays(1)
+                        )
+                    )
+                    dailySteps.forEach { bucket ->
+                        val date = bucket.startTime.toLocalDate().toString()
+                        val total = bucket.result[StepsRecord.COUNT_TOTAL] ?: 0L
                         records.put(JSONObject()
                             .put("id", "steps:$date")
                             .put("type", "steps_daily")
