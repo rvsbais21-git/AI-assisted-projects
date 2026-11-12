@@ -612,7 +612,7 @@ function renderExerciseProgressChart(){
    value=Number(e.total);
    unit='reps';
   }else{
-   const raw=String(e.load||'').trim(),match=raw.match(/^(-?\\d+(?:\\.\\d+)?)/);
+   const raw=String(e.load||'').trim(),match=raw.match(/^(-?\d+(?:\.\d+)?)/);
    if(!match)return;
    value=Number(match[1]);
    unit=(raw.match(/[a-zA-Z]+/)||[])[0]||'load';
