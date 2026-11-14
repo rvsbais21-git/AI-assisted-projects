@@ -794,4 +794,21 @@ renderAll();loadCalendarEmbed();loadSpotifyEmbed();initResources();loadGameNews(
 .exercise-progress-summary{margin-top:10px;color:#f8f5f5;font:11px 'DM Mono',monospace}
 @media(max-width:620px){.exercise-progress-heading{display:block}.exercise-progress-controls{margin-top:14px}.exercise-progress-controls label,.exercise-progress-controls .field{width:100%}}
 </style>
-\n</body></html>
+\n
+<style id="syllabus-tracker-scroll-window">
+/* Keep the complete syllabus in one fixed-height, independently scrollable viewport. */
+#syllabusTrackerCard #subjects{
+  height:360px;
+  overflow-y:auto;
+  overflow-x:hidden;
+  padding-right:10px;
+  overscroll-behavior:contain;
+  scrollbar-width:thin;
+  scrollbar-color:#8b3447 #202027;
+}
+#syllabusTrackerCard #subjects::-webkit-scrollbar{width:8px}
+#syllabusTrackerCard #subjects::-webkit-scrollbar-track{background:#202027}
+#syllabusTrackerCard #subjects::-webkit-scrollbar-thumb{background:#8b3447;border:2px solid #202027;border-radius:8px}
+#syllabusTrackerCard #subjects::-webkit-scrollbar-thumb:hover{background:#ed536b}
+</style>
+</body></html>
