@@ -617,7 +617,7 @@ function renderSubjects(){
   const existing=db.moduleCompletions?.[key],defaultDate=existing?.completedAt||today;
   const date=prompt('Enter the module completion date (YYYY-MM-DD):',defaultDate);
   if(date===null)return;
-  if(!/\d{4}-\d{2}-\d{2}$/.test(date)||!Number.isFinite(Date.parse(date+'T00:00:00Z'))||new Date(date+'T00:00:00Z').toISOString().slice(0,10)!==date)return alert('Enter a valid date in YYYY-MM-DD format.');
+  if(!/^\d{4}-\d{2}-\d{2}$/.test(date)||!Number.isFinite(Date.parse(date+'T00:00:00Z'))||new Date(date+'T00:00:00Z').toISOString().slice(0,10)!==date)return alert('Enter a valid date in YYYY-MM-DD format.');
   db.moduleCompletions??={};
   db.moduleCompletions[key]={subjectId:subject.id,subjectName:subject.name,module:moduleName,completedAt:date,revisions:[1,7,14,30].map(days=>({days,dueDate:new Date(Date.parse(date+'T00:00:00Z')+days*86400000).toISOString().slice(0,10),status:'pending'}))};
   save();if(calendarAccessToken)syncCalendarEvents(calendarAccessToken);
@@ -632,7 +632,7 @@ function renderRevisions(){
   const label=state==='completed'?'COMPLETED':state==='missed'?'OVERDUE':'UPCOMING';
   return '<div class="revision-row"><div><b>REVISION '+(i+1)+' · DAY '+rev.days+'</b><div class="note">'+esc(fmt(rev.dueDate))+' · '+label+'</div></div><button class="btn" data-revision-toggle="'+esc(key)+'|'+i+'">'+(rev.status==='completed'?'UNDO':'MARK DONE')+'</button></div>';
  }).join('')+'</div>').join('');
- host.querySelectorAll('[data-edit-module-date]').forEach(b=>b.onclick=()=>{const r=db.moduleCompletions[b.dataset.editModuleDate];if(!r)return;const date=prompt('Update module completion date (YYYY-MM-DD):',r.completedAt);if(date===null)return;if(!/\d{4}-\d{2}-\d{2}$/.test(date)||!Number.isFinite(Date.parse(date+'T00:00:00Z'))||new Date(date+'T00:00:00Z').toISOString().slice(0,10)!==date)return alert('Enter a valid date in YYYY-MM-DD format.');r.completedAt=date;r.revisions.forEach(rev=>rev.dueDate=new Date(Date.parse(date+'T00:00:00Z')+rev.days*86400000).toISOString().slice(0,10));save();if(calendarAccessToken)syncCalendarEvents(calendarAccessToken)});
+ host.querySelectorAll('[data-edit-module-date]').forEach(b=>b.onclick=()=>{const r=db.moduleCompletions[b.dataset.editModuleDate];if(!r)return;const date=prompt('Update module completion date (YYYY-MM-DD):',r.completedAt);if(date===null)return;if(!/^\d{4}-\d{2}-\d{2}$/.test(date)||!Number.isFinite(Date.parse(date+'T00:00:00Z'))||new Date(date+'T00:00:00Z').toISOString().slice(0,10)!==date)return alert('Enter a valid date in YYYY-MM-DD format.');r.completedAt=date;r.revisions.forEach(rev=>rev.dueDate=new Date(Date.parse(date+'T00:00:00Z')+rev.days*86400000).toISOString().slice(0,10));save();if(calendarAccessToken)syncCalendarEvents(calendarAccessToken)});
  host.querySelectorAll('[data-revision-toggle]').forEach(b=>b.onclick=()=>{const [key,index]=b.dataset.revisionToggle.split('|'),rev=db.moduleCompletions[key]?.revisions[Number(index)];if(!rev)return;rev.status=rev.status==='completed'?'pending':'completed';save()});
 }
 let calendarAccessToken=null,calendarTokenClient=null;
