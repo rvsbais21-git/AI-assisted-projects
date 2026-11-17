@@ -607,10 +607,29 @@ function renderSubjects(){
   s.topics.forEach(t=>(mods[t.module]??=[]).push(t));
   return '<div style="border-bottom:1px solid var(--line);padding:12px 0"><div class="row" style="justify-content:space-between"><b>'+esc(s.name)+'</b><span class="pill">'+done+'/'+total+' COMPLETE</span></div>'+(s.exam?'<p class="note">Exam: '+fmt(s.exam)+' · '+Math.ceil((new Date(s.exam)-new Date(today))/86400000)+' days remaining</p>':'')+'<div class="track"><div class="fill" style="width:'+(total?done/total*100:0)+'%"></div></div>'+Object.entries(mods).map(([m,ts])=>{
    const key=s.id+'|'+m,record=db.moduleCompletions?.[key];
-   return '<div class="row" style="justify-content:space-between;align-items:center;gap:8px;margin-top:12px"><div class="mono" style="color:var(--red2)">'+esc(m)+'</div><button class="btn" type="button" data-module-complete="'+esc(key)+'">'+(record?'COMPLETED · EDIT DATE':'MARK MODULE COMPLETE')+'</button></div>'+ts.map(t=>'<label class="task '+(t.done?'done':'')+'"><input type="checkbox" data-topic="'+s.id+'|'+t.id+'" '+(t.done?'checked':'')+'><span>'+esc(t.name)+'</span></label>').join('');
+   return '<div class="row" style="justify-content:space-between;align-items:center;gap:8px;margin-top:12px"><div class="mono" style="color:var(--red2)">'+esc(m)+'</div><div class="row" style="gap:6px"><button class="btn" type="button" data-module-complete="'+esc(key)+'">'+(record?'COMPLETED · EDIT DATE':'MARK MODULE COMPLETE')+'</button><button class="btn" type="button" data-delete-module="'+esc(key)+'" aria-label="Delete module '+esc(m)+'">DELETE MODULE</button></div></div>'+ts.map(t=>'<div class="row" style="gap:8px;align-items:center"><label class="task '+(t.done?'done':'')+'" style="flex:1"><input type="checkbox" data-topic="'+s.id+'|'+t.id+'" '+(t.done?'checked':'')+'><span>'+esc(t.name)+'</span></label><button class="btn" type="button" data-delete-topic="'+s.id+'|'+t.id+'" aria-label="Delete subtopic '+esc(t.name)+'">DELETE</button></div>').join('');
   }).join('')+'</div>'
  }).join(''):'<div class="empty">No subjects yet. Add one to begin.</div>';
  $('subjects').querySelectorAll('[data-topic]').forEach(x=>x.onchange=()=>{let [sid,tid]=x.dataset.topic.split('|'),t=db.subjects.find(s=>s.id===sid).topics.find(t=>t.id===tid);t.done=x.checked;save()});
+ function removeModuleSchedule(key){
+  const record=db.moduleCompletions?.[key];
+  if(record){db.pendingCalendarDeletes??=[];(record.revisions||[]).forEach(rev=>{if(rev.calendarEventId&&!db.pendingCalendarDeletes.includes(rev.calendarEventId))db.pendingCalendarDeletes.push(rev.calendarEventId)});delete db.moduleCompletions[key];}
+ }
+ $('subjects').querySelectorAll('[data-delete-module]').forEach(b=>b.onclick=()=>{
+  const key=b.dataset.deleteModule,[sid,...moduleParts]=key.split('|'),moduleName=moduleParts.join('|'),subject=db.subjects.find(x=>x.id===sid);
+  if(!subject)return;
+  const count=subject.topics.filter(t=>t.module===moduleName).length;
+  if(!confirm('Delete module "'+moduleName+'" and all '+count+' subtopics? Its revision schedule will also be removed. This cannot be undone.'))return;
+  subject.topics=subject.topics.filter(t=>t.module!==moduleName);removeModuleSchedule(key);save();
+ });
+ $('subjects').querySelectorAll('[data-delete-topic]').forEach(b=>b.onclick=()=>{
+  const [sid,tid]=b.dataset.deleteTopic.split('|'),subject=db.subjects.find(x=>x.id===sid),topic=subject?.topics.find(t=>t.id===tid);
+  if(!subject||!topic)return;
+  if(!confirm('Delete subtopic "'+topic.name+'"? This cannot be undone.'))return;
+  const moduleName=topic.module;subject.topics=subject.topics.filter(t=>t.id!==tid);
+  if(!subject.topics.some(t=>t.module===moduleName))removeModuleSchedule(sid+'|'+moduleName);
+  save();
+ });
  $('subjects').querySelectorAll('[data-module-complete]').forEach(b=>b.onclick=()=>{
   const key=b.dataset.moduleComplete,parts=key.split('|'),subject=db.subjects.find(x=>x.id===parts[0]),moduleName=parts.slice(1).join('|');
   if(!subject)return;
@@ -642,8 +661,16 @@ function setCalendarStatus(message){const el=$('calendarSyncStatus');if(el)el.te
 function calendarDatePlusOne(date){return new Date(Date.parse(date+'T00:00:00Z')+86400000).toISOString().slice(0,10)}
 async function syncCalendarEvents(token){
  const revisions=Object.entries(db.moduleCompletions||{}).flatMap(([key,record])=>(record.revisions||[]).map((rev,index)=>({key,record,rev,index})));
- if(!revisions.length){setCalendarStatus('No revision events to sync yet. Mark a module complete first.');return}
- let created=0,updated=0,failed=0;
+ const pendingDeletes=db.pendingCalendarDeletes||[];
+ if(!revisions.length&&!pendingDeletes.length){setCalendarStatus('No revision events to sync yet. Mark a module complete first.');return}
+ let created=0,updated=0,deleted=0,failed=0;
+ for(const eventId of [...pendingDeletes]){
+  try{
+   const response=await fetch('https://www.googleapis.com/calendar/v3/calendars/primary/events/'+encodeURIComponent(eventId),{method:'DELETE',headers:{Authorization:'Bearer '+token}});
+   if(response.ok||response.status===404||response.status===410){db.pendingCalendarDeletes=db.pendingCalendarDeletes.filter(id=>id!==eventId);deleted++;localStorage.setItem('purgatory-v02',JSON.stringify(db));}
+   else failed++;
+  }catch(error){failed++}
+ }
  for(const item of revisions){
   const {record,rev,index}=item;
   const event={summary:'PURGATORY · '+record.subjectName+' · '+record.module+' · Revision '+(index+1)+'/4',description:'Spaced revision reminder generated by PURGATORY.\nSubject: '+record.subjectName+'\nModule: '+record.module+'\nRevision interval: +'+rev.days+' days\nMark completion in PURGATORY.',start:{date:rev.dueDate},end:{date:calendarDatePlusOne(rev.dueDate)}};
@@ -654,11 +681,12 @@ async function syncCalendarEvents(token){
    if(existingId&&response.status===404)response=await fetch('https://www.googleapis.com/calendar/v3/calendars/primary/events',{method:'POST',headers:{Authorization:'Bearer '+token,'Content-Type':'application/json'},body:JSON.stringify(event)});
    if(!response.ok){failed++;continue}
    const savedEvent=await response.json();if(savedEvent.id)rev.calendarEventId=savedEvent.id;
+   localStorage.setItem('purgatory-v02',JSON.stringify(db));
    if(existingId)updated++;else created++;
   }catch(error){failed++}
  }
  localStorage.setItem('purgatory-v02',JSON.stringify(db));renderAll();
- setCalendarStatus('Sync finished: '+created+' created, '+updated+' updated, '+failed+' failed. '+(failed?'Check authorization and try Sync Again.':'Calendar is up to date.'));
+ setCalendarStatus('Sync finished: '+created+' created, '+updated+' updated, '+deleted+' deleted, '+failed+' failed. '+(failed?'Check authorization and try Sync Again.':'Calendar is up to date.'));
 }
 function requestGoogleCalendarAccess(){
  const clientId=String($('calendarClientId').value||'').trim();if(!clientId){setCalendarStatus('Enter your Google OAuth Client ID first.');return}
