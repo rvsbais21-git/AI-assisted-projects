@@ -718,7 +718,7 @@ function renderOverviewTaskManager(){
  $('overviewPastCount').textContent=pastItems.length+' PENDING';
  const editor=$('overviewTaskEditor');
  if(overviewTaskEditingId!==null){
-  const task=db.tasks.find(t=>t.id===overviewTaskEditingId);
+  const task=overviewTaskEditingId==='__new__'?{id:'__new__',name:'',subjectId:db.subjects[0]?.id||'',date:today,level:'floor'}:db.tasks.find(t=>t.id===overviewTaskEditingId);
   if(!task){overviewTaskEditingId=null;editor.hidden=true;editor.innerHTML='';return}
   editor.hidden=false;
   editor.innerHTML='<h3 class="paneltitle">'+(task.id==='__new__'?'ADD TASK':'EDIT TASK')+'</h3><div class="form"><label>Task<input class="field" id="overviewTaskName" value="'+esc(task.name)+'"></label><label>Subject<select class="field" id="overviewTaskSubject">'+db.subjects.map(x=>'<option value="'+x.id+'" '+(x.id===task.subjectId?'selected':'')+'>'+esc(x.name)+'</option>').join('')+'</select></label><label>Date<input class="field" type="date" id="overviewTaskDate" value="'+esc(task.date)+'"></label><label>Daily goal<select class="field" id="overviewTaskLevel"><option value="floor" '+((task.level||'floor')==='floor'?'selected':'')+'>Floor</option><option value="ceiling" '+(task.level==='ceiling'?'selected':'')+'>Ceiling</option></select></label></div><div class="editor-actions"><button type="button" class="btn primary" id="overviewTaskSave">SAVE TASK</button><button type="button" class="btn" id="overviewTaskCancel">CANCEL</button></div>';
