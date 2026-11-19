@@ -543,7 +543,11 @@ h1{font:900 clamp(42px,5vw,72px) 'Bebas Neue',Impact,sans-serif;letter-spacing:1
       <div class="comic-panel-inner">
         <div class="comic-kicker">03 / DAILY OBJECTIVES</div>
         <h2>TODAY'S DIRECTIVE</h2>
-        <div id="todayTasks" class="empty">No tasks added for today.</div>
+        <div class="directive-columns">
+          <section class="directive-column"><div class="directive-column-heading"><h3>TODAY'S TASKS</h3><button type="button" class="btn" id="overviewAddTask">+ ADD</button></div><div id="overviewTodayTasks"></div></section>
+          <section class="directive-column"><div class="directive-column-heading"><h3>PENDING PAST TASKS</h3><span class="pill" id="overviewPastCount">0 PENDING</span></div><div id="overviewPastTasks"></div></section>
+        </div>
+        <div id="overviewTaskEditor" class="overview-task-editor" hidden></div>
       </div>
     </article>
     <article class="comic-panel panel-calendar" id="calendarPanel">
@@ -704,6 +708,29 @@ function requestGoogleCalendarAccess(){
 $('connectGoogleCalendar').onclick=requestGoogleCalendarAccess;
 $('syncGoogleCalendar').onclick=()=>{if(!calendarAccessToken){requestGoogleCalendarAccess();return}syncCalendarEvents(calendarAccessToken)};
 $('addTask').onclick=()=>{let n=$('taskName').value.trim();if(!n)return;db.tasks.push({id:crypto.randomUUID(),name:n,subjectId:$('taskSubject').value,date:$('taskDate').value||today,level:$('taskLevel').value==='ceiling'?'ceiling':'floor',done:false});$('taskName').value='';save()};
+let overviewTaskEditingId=null;
+function renderOverviewTaskManager(){
+ const todayItems=db.tasks.filter(t=>t.date===today);
+ const pastItems=db.tasks.filter(t=>t.date<today&&!t.done).slice().sort((a,b)=>b.date.localeCompare(a.date));
+ const renderRow=t=>'<div class="directive-task-row '+(t.done?'done':'')+'"><label class="directive-task-main"><input type="checkbox" data-overview-task-toggle="'+t.id+'" '+(t.done?'checked':'')+'><span>'+esc(t.name)+'<small class="directive-task-meta">'+esc(db.subjects.find(x=>x.id===t.subjectId)?.name||'General')+' · '+(t.level||'floor').toUpperCase()+'</small></span></label><div class="directive-task-actions"><button type="button" class="btn" data-overview-task-edit="'+t.id+'">EDIT</button><button type="button" class="btn" data-overview-task-delete="'+t.id+'">DELETE</button></div></div>';
+ $('overviewTodayTasks').innerHTML=todayItems.length?['floor','ceiling'].map(level=>{const group=todayItems.filter(t=>(t.level||'floor')===level);return group.length?'<div class="today-goal-heading '+level+'">'+level.toUpperCase()+'</div>'+group.map(renderRow).join(''):''}).join(''):'<div class="daily-empty">No tasks scheduled for today.</div>';
+ let lastDate='';$('overviewPastTasks').innerHTML=pastItems.length?pastItems.map(t=>{const heading=t.date!==lastDate?'<div class="directive-task-date">'+dailyHeading(t.date)+'</div>':'';lastDate=t.date;return heading+renderRow(t)}).join(''):'<div class="daily-empty">No pending past tasks.</div>';
+ $('overviewPastCount').textContent=pastItems.length+' PENDING';
+ const editor=$('overviewTaskEditor');
+ if(overviewTaskEditingId!==null){
+  const task=db.tasks.find(t=>t.id===overviewTaskEditingId);
+  if(!task){overviewTaskEditingId=null;editor.hidden=true;editor.innerHTML='';return}
+  editor.hidden=false;
+  editor.innerHTML='<h3 class="paneltitle">'+(task.id==='__new__'?'ADD TASK':'EDIT TASK')+'</h3><div class="form"><label>Task<input class="field" id="overviewTaskName" value="'+esc(task.name)+'"></label><label>Subject<select class="field" id="overviewTaskSubject">'+db.subjects.map(x=>'<option value="'+x.id+'" '+(x.id===task.subjectId?'selected':'')+'>'+esc(x.name)+'</option>').join('')+'</select></label><label>Date<input class="field" type="date" id="overviewTaskDate" value="'+esc(task.date)+'"></label><label>Daily goal<select class="field" id="overviewTaskLevel"><option value="floor" '+((task.level||'floor')==='floor'?'selected':'')+'>Floor</option><option value="ceiling" '+(task.level==='ceiling'?'selected':'')+'>Ceiling</option></select></label></div><div class="editor-actions"><button type="button" class="btn primary" id="overviewTaskSave">SAVE TASK</button><button type="button" class="btn" id="overviewTaskCancel">CANCEL</button></div>';
+  $('overviewTaskSave').onclick=()=>{const name=$('overviewTaskName').value.trim();if(!name)return alert('Enter a task name.');const data={name,subjectId:$('overviewTaskSubject').value,date:$('overviewTaskDate').value||today,level:$('overviewTaskLevel').value};if(task.id==='__new__')db.tasks.push({id:crypto.randomUUID(),...data,done:false});else Object.assign(task,data);overviewTaskEditingId=null;save()};
+  $('overviewTaskCancel').onclick=()=>{overviewTaskEditingId=null;renderOverviewTaskManager()};
+ }else{editor.hidden=true;editor.innerHTML=''}
+ document.querySelectorAll('[data-overview-task-toggle]').forEach(input=>input.onchange=()=>{const t=db.tasks.find(x=>x.id===input.dataset.overviewTaskToggle);if(t){t.done=input.checked;save()}});
+ document.querySelectorAll('[data-overview-task-edit]').forEach(button=>button.onclick=()=>{overviewTaskEditingId=button.dataset.overviewTaskEdit;renderOverviewTaskManager()});
+ document.querySelectorAll('[data-overview-task-delete]').forEach(button=>button.onclick=()=>{const t=db.tasks.find(x=>x.id===button.dataset.overviewTaskDelete);if(!t||!confirm('Delete "'+t.name+'"? This cannot be undone.'))return;db.tasks=db.tasks.filter(x=>x.id!==t.id);save()});
+}
+$('overviewAddTask').onclick=()=>{overviewTaskEditingId='__new__';renderOverviewTaskManager()};
+
 function renderExamSchedule(){const scheduled=db.subjects.filter(s=>s.exam).slice().sort((a,b)=>a.exam.localeCompare(b.exam));$('examList').innerHTML=scheduled.length?'<div class="tablewrap"><table><thead><tr><th>SUBJECT</th><th>EXAM DATE</th><th>STATUS</th><th></th></tr></thead><tbody>'+scheduled.map(s=>{const delta=Math.ceil((new Date(s.exam+'T00:00:00')-new Date(today+'T00:00:00'))/86400000);return '<tr><td><b>'+esc(s.name)+'</b></td><td>'+fmt(s.exam)+'</td><td>'+(delta<0?'PAST':delta===0?'TODAY':delta+' DAYS LEFT')+'</td><td><button class="btn" data-clear-exam="'+s.id+'">REMOVE DATE</button></td></tr>'}).join('')+'</tbody></table></div>':'<div class="empty">No exams scheduled. Choose a subject and add its exam date above.</div>';$('examList').querySelectorAll('[data-clear-exam]').forEach(b=>b.onclick=()=>{const subject=db.subjects.find(x=>x.id===b.dataset.clearExam);if(subject){subject.exam='';save()}})}
 function dailyHeading(date){const [y,m,d]=date.split('-').map(Number),day=new Date(y,m-1,d);return String(d).padStart(2,'0')+'/'+String(m).padStart(2,'0')+'/'+y+'-'+['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'][day.getDay()]}
 function taskRows(items,withControls){return items.length?items.map((t,i)=>withControls?'<div class="task-ledger-row"><label class="task '+(t.done?'done':'')+'"><input type="checkbox" data-task="'+t.id+'" '+(t.done?'checked':'')+'><span class="task-number">'+(i+1)+'.</span><span>'+esc(t.name)+' <small class="note">('+esc(db.subjects.find(s=>s.id===t.subjectId)?.name||'General')+')</small></span></label><button type="button" class="btn task-delete" data-delete-task="'+t.id+'" aria-label="Delete '+esc(t.name)+'" title="Delete task">DELETE</button></div>':'<div class="directive-task '+(t.done?'done':'')+'"><span class="today-task-number">'+(i+1)+'.</span><span>'+esc(t.name)+'</span></div>').join(''):'<div class="daily-empty">No tasks added.</div>'}
@@ -825,7 +852,7 @@ function renderExerciseProgressChart(){
 $('progressExercise').onchange=renderExerciseProgressChart;
 $('progressMetric').onchange=renderExerciseProgressChart;
 function renderAll(){renderHabits();renderSubjects();renderRevisions();renderExamSchedule();renderTasks();$('workHistory').innerHTML=table(db.workouts.slice().reverse(),[['DATE',x=>fmt(x.date)],['DAY',x=>x.day],['EXERCISES',x=>x.exercises.map(e=>e.name+' ('+e.total+')').join(', ')],['NOTE',x=>x.note]]);$('problems').innerHTML=table(db.problems.slice().reverse(),[['DATE',x=>fmt(x.date)],['PROBLEM',x=>x.name],['TOPIC',x=>x.topic],['PLATFORM',x=>x.platform],['RESULT',x=>x.result]]);$('contests').innerHTML=table(db.contests.slice().reverse(),[['DATE',x=>fmt(x.date)],['CONTEST',x=>x.name],['SOLVED',x=>x.solved]]);
-let start=weekStart(today),ws=db.workouts.filter(w=>w.date>=start&&w.date<=today);$('mTrain').textContent=ws.length;$('mTrainFeature').textContent=ws.length;$('trainingAccentBar').style.width=(Math.min(ws.length,7)/7*100)+'%';$('mTasks').textContent=db.tasks.filter(t=>t.date>=start&&t.date<=today&&t.done).length;let hc=db.habitNames.filter(n=>(db.habits[today]||{})[n]).length;$('mHabits').textContent=hc+'/'+db.habitNames.length;let exams=db.subjects.filter(s=>s.exam&&s.exam>=today).sort((a,b)=>a.exam.localeCompare(b.exam));let examDays=exams.length?Math.ceil((new Date(exams[0].exam+'T00:00:00')-new Date(today+'T00:00:00'))/86400000):null;$('mExam').textContent=examDays===null?'—':examDays===0?'TODAY':examDays+'d';$('mExamName').textContent=exams.length?exams[0].name.toUpperCase()+' · '+fmt(exams[0].exam).toUpperCase():'NO EXAM SCHEDULED';let topics=db.subjects.flatMap(s=>s.topics),pct=topics.length?Math.round(topics.filter(t=>t.done).length/topics.length*100):0;$('completion').textContent=pct+'%';$('completionBar').style.width=pct+'%';let todays=db.tasks.filter(t=>t.date===today);$('todayTasks').innerHTML=['floor','ceiling'].map(level=>'<section class="today-goal-group"><h3 class="today-goal-heading '+level+'">'+(level==='floor'?'FLOOR':'CEILING')+'</h3>'+taskRows(todays.filter(t=>(t.level||'floor')===level),false)+'</section>').join('');
+let start=weekStart(today),ws=db.workouts.filter(w=>w.date>=start&&w.date<=today);$('mTrain').textContent=ws.length;$('mTrainFeature').textContent=ws.length;$('trainingAccentBar').style.width=(Math.min(ws.length,7)/7*100)+'%';$('mTasks').textContent=db.tasks.filter(t=>t.date>=start&&t.date<=today&&t.done).length;let hc=db.habitNames.filter(n=>(db.habits[today]||{})[n]).length;$('mHabits').textContent=hc+'/'+db.habitNames.length;let exams=db.subjects.filter(s=>s.exam&&s.exam>=today).sort((a,b)=>a.exam.localeCompare(b.exam));let examDays=exams.length?Math.ceil((new Date(exams[0].exam+'T00:00:00')-new Date(today+'T00:00:00'))/86400000):null;$('mExam').textContent=examDays===null?'—':examDays===0?'TODAY':examDays+'d';$('mExamName').textContent=exams.length?exams[0].name.toUpperCase()+' · '+fmt(exams[0].exam).toUpperCase():'NO EXAM SCHEDULED';let topics=db.subjects.flatMap(s=>s.topics),pct=topics.length?Math.round(topics.filter(t=>t.done).length/topics.length*100):0;$('completion').textContent=pct+'%';$('completionBar').style.width=pct+'%';renderOverviewTaskManager();
 let daily=Object.entries(db.daily).sort((a,b)=>a[0].localeCompare(b[0]));renderTrainingStats();renderExerciseProgressChart();stats('sleepStats',daily.filter(x=>x[1].sleep!=null).slice(-10).map(x=>({label:x[0],value:x[1].sleep+' h'})));stats('weightStats',daily.filter(x=>x[1].weight!=null).slice(-10).map(x=>({label:x[0],value:x[1].weight+' kg'})));renderAcademicProgressChart();$('recordCount').textContent=db.workouts.length+daily.length+Object.keys(db.habits).length+db.subjects.length+db.tasks.length+db.problems.length+db.contests.length}
 $('nav').querySelectorAll('button').forEach(b=>b.onclick=()=>{document.querySelectorAll('nav button').forEach(x=>x.classList.remove('active'));b.classList.add('active');document.querySelectorAll('.page').forEach(x=>x.classList.add('hidden'));$(b.dataset.page).classList.remove('hidden');document.querySelector('.main').dataset.activePage=b.dataset.page;$('crumb').textContent='SYSTEM / '+b.dataset.page.toUpperCase();$('title').textContent=({overview:'Command Center',health:'Health & Recovery',academics:'Academic Campaign',dsa:'Problem-Solving Ledger',analytics:'Trend Analysis',settings:'Data Custody'})[b.dataset.page]});
 document.querySelectorAll('.comic-overview [data-page]').forEach(b=>b.onclick=()=>{const target=document.querySelector('#nav [data-page="'+b.dataset.page+'"]');if(target)target.click()});
@@ -1049,4 +1076,24 @@ renderAll();loadCalendarEmbed();loadSpotifyEmbed();initResources();loadGameNews(
 .revision-row{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:9px 0 0 12px}
 @media(max-width:520px){.revision-row{align-items:flex-start}}
 </style>
-</body></html>
+<style id="overview-directive-task-manager">
+.directive-columns{display:grid;grid-template-columns:1fr 1fr;gap:22px;margin-top:12px}
+.directive-column{min-width:0;padding:12px;border:1px solid #777;background:#09090c}
+.directive-column-heading{display:flex;justify-content:space-between;align-items:center;gap:8px;margin-bottom:10px;padding-bottom:8px;border-bottom:2px solid #eee}
+.directive-column-heading h3{font:900 17px 'Bebas Neue';letter-spacing:1px;color:#fff;margin:0}
+.directive-column .btn{padding:6px 8px}
+.directive-task-row{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:8px;align-items:center;padding:9px 0;border-bottom:1px solid #ffffff30}
+.directive-task-main{display:flex;gap:8px;align-items:flex-start;min-width:0;font-size:11px;line-height:1.45}
+.directive-task-main input{accent-color:var(--red);margin-top:2px}
+.directive-task-main span{overflow-wrap:anywhere}
+.directive-task-row.done .directive-task-main span{text-decoration:line-through;color:var(--muted)}
+.directive-task-meta{display:block;color:#aaa;font:9px 'DM Mono';margin-top:3px}
+.directive-task-actions{display:flex;gap:5px;flex-wrap:wrap;justify-content:flex-end}
+.directive-task-actions .btn{font-size:9px;padding:5px 7px}
+.directive-task-date{font:9px 'DM Mono';color:#ff9eae;margin:10px 0 2px}
+.overview-task-editor{margin-top:12px;padding:12px;border:2px solid var(--red2);background:#101014}
+.overview-task-editor .form{grid-template-columns:repeat(4,minmax(0,1fr))}
+.overview-task-editor .editor-actions{display:flex;gap:8px;flex-wrap:wrap}
+@media(max-width:700px){.directive-columns{grid-template-columns:1fr}.overview-task-editor .form{grid-template-columns:1fr 1fr}}
+@media(max-width:420px){.overview-task-editor .form{grid-template-columns:1fr}}
+</style></body></html>
