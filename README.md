@@ -14,7 +14,7 @@ A manga-inspired personal dashboard for bringing training, academics, problem-so
 
 ![Status](https://img.shields.io/badge/status-active%20prototype-c52e48?style=flat-square)
 ![Built with](https://img.shields.io/badge/built%20with-HTML%20%2F%20CSS%20%2F%20JavaScript-171717?style=flat-square)
-![Storage](https://img.shields.io/badge/storage-browser%20localStorage-171717?style=flat-square)
+![Storage](https://img.shields.io/badge/storage-localStorage%20%2B%20optional%20Supabase%20sync-171717?style=flat-square)
 ![Hosting](https://img.shields.io/badge/hosted%20on-GitHub%20Pages-171717?style=flat-square)
 
 </div>
@@ -80,25 +80,22 @@ The current application is intentionally lightweight: HTML, CSS, and vanilla Jav
 
 ## Data, storage, and privacy
 
-PURGATORY currently stores records in the browser's `localStorage`.
+PURGATORY stores records in the browser's `localStorage` by default. The Data section also includes optional Supabase cloud sync for the structured app dataset.
 
-- Records belong to the browser profile and device where they were entered.
-- There is no account system, cloud database, or cross-device synchronisation.
-- Data is not encrypted by the application.
-- Clearing browser storage may permanently remove locally stored records.
-- Use the JSON export function to keep your own backups.
-- Avoid entering sensitive information, especially on shared devices.
+- Local records belong to the browser profile and device until cloud sync is configured.
+- Cloud sync uses Supabase Auth and row-level security so accounts can access only their own state.
+- The app is not end-to-end encrypted, and local browser data is not encrypted by PURGATORY.
+- Clearing browser storage may permanently remove a local-only copy.
+- Academic PDF resources stay in IndexedDB locally and can be uploaded to the private Storage bucket after the initial browser copy is confirmed.
+- Use the JSON export function to keep an independent backup.
 
-**Local-first does not mean automatically backed up.** Keep an independent copy of your exported data.
+See [Supabase setup](supabase/SETUP.md) for cloud sync and [MCP setup](supabase/MCP_SETUP.md) for read-only assistant access.
 
 ## Current scope
 
-The live prototype is functional, but it is not feature-complete. In particular:
-
-- Analytics are limited to the summaries currently implemented in the interface.
-- There is no automated test suite or data-schema migration system.
-- There is no authentication, encrypted sync, or remote persistence.
-- The current persistence layer is `localStorage`; IndexedDB is not implemented.
+- Cloud sync is optional and requires signing in and choosing the initial source.
+- The app does not provide end-to-end encryption.
+- Academic resource files stored in IndexedDB are not yet synced to Supabase Storage.
 - The interface and data model may change as the project evolves.
 
 ## Development direction

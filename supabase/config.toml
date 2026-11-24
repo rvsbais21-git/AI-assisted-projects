@@ -1,0 +1,6 @@
+project_id = "dfqbdopeprehdkxurqgp"
+
+[functions.purgatory-mcp]
+# OAuth discovery must be reachable before the MCP user's access token is present.
+# The Edge Function enforces the signed-in user token and Supabase RLS itself.
+verify_jwt = false
