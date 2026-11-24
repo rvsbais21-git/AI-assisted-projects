@@ -1,6 +1,6 @@
 const SUPABASE_URL = 'https://dfqbdopeprehdkxurqgp.supabase.co';
 const AUTH_URL = `${SUPABASE_URL}/auth/v1`;
-const SUPABASE_PUBLISHABLE_KEY = 'sb_publishable_C6DQ4DbR-g1kum5HU7wFqg_ARYXuYA';
+const SUPABASE_PUBLISHABLE_KEY = 'sb_publishable_C6DQ4DbR-g1kum5HU7wFqg_ARYXuYA2';
 const STORAGE_KEY = 'sb-dfqbdopeprehdkxurqgp-auth-token';
 
 const authorizationId = new URLSearchParams(location.search).get('authorization_id');
