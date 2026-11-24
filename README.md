@@ -80,25 +80,22 @@ The current application is intentionally lightweight: HTML, CSS, and vanilla Jav
 
 ## Data, storage, and privacy
 
-PURGATORY currently stores records in the browser's `localStorage`.
+PURGATORY stores records in the browser's `localStorage` by default. The Data section also includes optional Supabase cloud sync for the structured app dataset.
 
-- Records belong to the browser profile and device where they were entered.
-- There is no account system, cloud database, or cross-device synchronisation.
-- Data is not encrypted by the application.
-- Clearing browser storage may permanently remove locally stored records.
-- Use the JSON export function to keep your own backups.
-- Avoid entering sensitive information, especially on shared devices.
+- Local records belong to the browser profile and device until cloud sync is configured.
+- Cloud sync uses Supabase Auth and row-level security so accounts can access only their own state.
+- The app is not end-to-end encrypted, and local browser data is not encrypted by PURGATORY.
+- Clearing browser storage may permanently remove a local-only copy.
+- Academic resource files remain in IndexedDB and are not included in cloud sync yet.
+- Use the JSON export function to keep an independent backup.
 
-**Local-first does not mean automatically backed up.** Keep an independent copy of your exported data.
+See [Supabase setup](supabase/SETUP.md) for cloud sync and [MCP setup](supabase/MCP_SETUP.md) for read-only assistant access.
 
 ## Current scope
 
-The live prototype is functional, but it is not feature-complete. In particular:
-
-- Analytics are limited to the summaries currently implemented in the interface.
-- There is no automated test suite or data-schema migration system.
-- There is no authentication, encrypted sync, or remote persistence.
-- The current persistence layer is `localStorage`; IndexedDB is not implemented.
+- Cloud sync is optional and requires signing in and choosing the initial source.
+- The app does not provide end-to-end encryption.
+- Academic resource files stored in IndexedDB are not yet synced to Supabase Storage.
 - The interface and data model may change as the project evolves.
 
 ## Development direction
