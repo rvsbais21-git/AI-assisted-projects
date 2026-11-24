@@ -48,10 +48,57 @@ Deno.serve(
         }
 
         server.registerTool(
+          'list_syllabus_files',
+          {
+            title: 'List syllabus files',
+            description: 'List PDF resources the signed-in user has uploaded to PURGATORY private cloud storage.',
+            inputSchema: z.object({}),
+            annotations: { readOnlyHint: true, openWorldHint: false },
+          },
+          async () => {
+            const folder = `${supabase.auth.user?.id ?? ''}/syllabus`
+            const { data, error } = await supabase.storage
+              .from('purgatory-files')
+              .list(folder, { limit: 100, sortBy: { column: 'name', order: 'asc' } })
+            if (error) throw new Error(`Could not list syllabus files: ${error.message}`)
+            return result({
+              files: (data ?? []).filter((file) => file.name.endsWith('.pdf')).map((file) => ({
+                id: file.name.replace(/\\.pdf$/i, ''),
+                title: typeof file.metadata?.title === 'string' ? file.metadata.title : file.name,
+                size_bytes: file.metadata?.size ?? null,
+                uploaded_at: file.created_at ?? null,
+              })),
+            })
+          },
+        )
+
+        server.registerTool(
+          'get_syllabus_file',
+          {
+            title: 'Get syllabus file',
+            description: 'Create a short-lived private download link for one syllabus PDF. Use the link to read the document; it expires after 60 seconds.',
+            inputSchema: z.object({
+              id: z.string().uuid().describe('The file id returned by list_syllabus_files.'),
+            }),
+            annotations: { readOnlyHint: true, openWorldHint: false },
+          },
+          async ({ id }) => {
+            const userId = supabase.auth.user?.id
+            if (!userId) throw new Error('Authentication required.')
+            const path = `${userId}/syllabus/${id}.pdf`
+            const { data, error } = await supabase.storage
+              .from('purgatory-files')
+              .createSignedUrl(path, 60)
+            if (error || !data?.signedUrl) throw new Error(`Could not open syllabus file: ${error?.message ?? 'File not found.'}`)
+            return result({ id, expires_in_seconds: 60, download_url: data.signedUrl })
+          },
+        )
+
+        server.registerTool(
           'get_purgatory_overview',
           {
             title: 'Get PURGATORY overview',
-            description: 'Read counts and sync freshness for the signed-in user’s academic and workout records. Does not return daily health metrics or habits.',
+            description: 'Read counts and sync freshness for the signed-in user’s academic, workout, and private syllabus-file records. Does not return daily health metrics or habits.',
             inputSchema: z.object({}),
             annotations: { readOnlyHint: true, openWorldHint: false },
           },
@@ -78,7 +125,7 @@ Deno.serve(
                 workouts: workouts.length,
               },
               upcoming_exams: upcomingExams,
-              note: 'Uploaded syllabus files stored in browser IndexedDB are not included in cloud sync yet.',
+              note: 'PDF contents can be read using list_syllabus_files and get_syllabus_file when files have been uploaded to private cloud storage.',
             })
           },
         )
