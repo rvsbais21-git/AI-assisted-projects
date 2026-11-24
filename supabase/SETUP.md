@@ -1,12 +1,12 @@
 # PURGATORY — Supabase setup
 
-PURGATORY stores its main records in browser `localStorage` by default. The app now includes optional cloud sync with Supabase for cross-device access. Academic resource files remain in IndexedDB and are not yet cloud-synced.
+PURGATORY stores its main records in browser `localStorage` by default. The app now includes optional cloud sync with Supabase for cross-device access. Academic PDF files remain in IndexedDB locally and can also be copied to the private Supabase Storage bucket after the user chooses the initial browser dataset.
 
 ## Current architecture
 
 - `purgatory-v02` in localStorage is the browser's application dataset.
 - Academic resource files are stored separately in IndexedDB database `purgatory-resources-v1`.
-- Supabase holds one versioned JSONB state document per authenticated user and a private Storage bucket for a future file-sync stage.
+- Supabase holds one versioned JSONB state document per authenticated user and the private `purgatory-files` bucket stores uploaded syllabus PDFs.
 - Row Level Security restricts each account to its own state and files.
 - A compare-and-swap RPC prevents silent overwrites when two devices edit concurrently.
 
@@ -41,10 +41,10 @@ Use the same account on each device.
 1. Keep an export of your local records using the app's **Data → EXPORT JSON** control.
 2. In the app, open **Data → Cloud Synchronisation** and create or sign in to your account.
 3. On the browser holding the records you want to keep, choose **UPLOAD THIS BROWSER DATA** and confirm the record counts.
-4. On another device, sign in and choose **USE CLOUD DATA** to download the cloud copy.
+4. On another device, sign in and choose **USE CLOUD DATA** to download the structured cloud copy.
 5. Verify the records on both devices and keep the export as a backup.
 
-Sync begins only after you choose the initial source. If the browser and cloud copies later diverge, sync pauses so neither copy is silently overwritten. Uploaded PDF resources are not included in this sync stage.
+Sync begins only after you choose the initial source. Choosing **UPLOAD THIS BROWSER DATA** also copies this browser’s academic PDFs into your private Storage folder. New PDFs upload automatically afterward, while the browser keeps its local copies. If the browser and cloud copies later diverge, sync pauses so neither structured-data copy is silently overwritten. PDFs from another device are available to the assistant through the MCP tools; the current app does not automatically download cloud PDFs into that device’s browser.
 
 For automatic assistant access to the structured cloud records, follow [MCP_SETUP.md](MCP_SETUP.md).
 
