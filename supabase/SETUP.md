@@ -1,66 +1,66 @@
 # PURGATORY — Supabase setup
 
-This directory contains the first, non-destructive stage of the cross-device sync migration.
+PURGATORY stores its main records in browser `localStorage` by default. The app now includes optional cloud sync with Supabase for cross-device access. Academic resource files remain in IndexedDB and are not yet cloud-synced.
 
 ## Current architecture
 
-- `index.html` remains the existing app. Browser data remains the active source until cloud migration is configured and verified.
-- `purgatory-v02` in localStorage is the current application dataset.
+- `purgatory-v02` in localStorage is the browser's application dataset.
 - Academic resource files are stored separately in IndexedDB database `purgatory-resources-v1`.
-- Supabase will hold one versioned JSONB state document per authenticated user and private resource files in Storage.
+- Supabase holds one versioned JSONB state document per authenticated user and a private Storage bucket for a future file-sync stage.
+- Row Level Security restricts each account to its own state and files.
 - A compare-and-swap RPC prevents silent overwrites when two devices edit concurrently.
 
-## 1. Create a Supabase project
+## 1. Confirm the Supabase project
 
-1. Create a project at https://supabase.com/dashboard.
-2. Choose a strong database password and keep it private.
-3. Wait for provisioning to finish.
-4. Open Project Settings → API and copy the Project URL and Publishable key (older projects may call this the anon key).
-5. Never put a service_role or secret key in the website or GitHub.
+The app is currently configured for the Supabase project `dfqbdopeprehdkxurqgp`. If this is your project, use it; do not create a second project unless you intend to move the app. Open Project Settings → API to confirm the project URL and Publishable key. A publishable key may be in the public website code; it must only be used with the RLS policies in this setup.
+
+Never put a `service_role` or secret key in the website or GitHub.
 
 ## 2. Create the database and storage policies
+
+If they are not already present:
 
 1. Open SQL Editor in the Supabase dashboard.
 2. Open `schema.sql` from this repository.
 3. Paste the complete file into a new SQL query and run it.
 4. Confirm that `public.purgatory_state` and the private `purgatory-files` bucket exist.
 
-The SQL enables Row Level Security, restricts each account to its own row and files, and adds an optimistic-concurrency RPC.
+The SQL enables Row Level Security, restricts each account to its own row and files, and adds the optimistic-concurrency RPC.
 
-## 3. Configure authentication
+## 3. Configure sign-in
 
-For the first rollout, use email/password authentication with email confirmation. Add the PURGATORY site to Authentication → URL Configuration:
+In Supabase Authentication → URL Configuration, allow the PURGATORY site:
 
 - Site URL: `https://rvsbais21-git.github.io/AI-assisted-projects/`
 - Redirect URL: `https://rvsbais21-git.github.io/AI-assisted-projects/`
 
 Use the same account on each device.
 
-## 4. Do not migrate data yet
+## 4. Turn on cloud sync
 
-Do not clear browser storage, uninstall the browser, or use PURGATORY's Reset button during migration.
+1. Keep an export of your local records using the app's **Data → EXPORT JSON** control.
+2. In the app, open **Data → Cloud Synchronisation** and create or sign in to your account.
+3. On the browser holding the records you want to keep, choose **UPLOAD THIS BROWSER DATA** and confirm the record counts.
+4. On another device, sign in and choose **USE CLOUD DATA** to download the cloud copy.
+5. Verify the records on both devices and keep the export as a backup.
 
-The next implementation stage will add sign-in, one-time local-to-cloud import with preview and confirmation, automatic upload, initial download on new devices, realtime notifications, conflict handling, and IndexedDB PDF migration.
+Sync begins only after you choose the initial source. If the browser and cloud copies later diverge, sync pauses so neither copy is silently overwritten. Uploaded PDF resources are not included in this sync stage.
 
-The app must not sync until the user signs in and explicitly confirms the initial import. This prevents an empty device from overwriting an existing dataset.
+For automatic assistant access to the structured cloud records, follow [MCP_SETUP.md](MCP_SETUP.md).
 
-## 5. Credentials
+## Credentials and backups
 
-When the app integration is ready, enter only the Project URL and Publishable key (or legacy anon key). Never enter a service-role key, database password, OAuth client secret, or access token into PURGATORY.
+Use only the Project URL and Publishable key (or legacy anon key) in the website. Never put a service-role key, database password, OAuth client secret, or access token in PURGATORY or this public repository.
 
-## Pricing
+Supabase plans have usage limits and may have inactivity or pausing rules. Check current limits before relying on it as your only copy of the records, and keep regular exports.
 
-Supabase has a free plan with usage limits. Check current plan limits, pausing/inactivity rules and usage before relying on it as the only copy of records. Keep regular exports.
+## Safety checklist
 
-## Migration safety checklist
-
-- [ ] Supabase project created
+- [ ] Supabase project confirmed
 - [ ] SQL schema executed successfully
-- [ ] Auth URL configured
-- [ ] Project URL and publishable key copied
+- [ ] Authentication redirect URLs configured
 - [ ] Existing local JSON exported
-- [ ] IndexedDB resources exported or migrated
 - [ ] Cloud import preview matches local record counts
 - [ ] Second device signs in and downloads the same dataset
-- [ ] Two-device edit/conflict test passed
+- [ ] Two-device edit/conflict behavior checked
 - [ ] Backup and restore tested
