@@ -29,7 +29,7 @@ Deno.serve(
       // Every data query runs as the signed-in user and is constrained by RLS.
       withSupabase({ auth: 'user' }),
     ],
-    async (req, { supabase }) => {
+    async (req, { supabase, userClaims }) => {
       const handler = createMcpHandler(() => {
         const server = new McpServer({ name: 'purgatory-read-only', version: '1.0.0' })
 
@@ -56,7 +56,9 @@ Deno.serve(
             annotations: { readOnlyHint: true, openWorldHint: false },
           },
           async () => {
-            const folder = `${supabase.auth.user?.id ?? ''}/syllabus`
+            const userId = typeof userClaims?.sub === 'string' ? userClaims.sub : ''
+            if (!userId) throw new Error('Authentication required.')
+            const folder = `${userId}/syllabus`
             const { data, error } = await supabase.storage
               .from('purgatory-files')
               .list(folder, { limit: 100, sortBy: { column: 'name', order: 'asc' } })
@@ -83,7 +85,7 @@ Deno.serve(
             annotations: { readOnlyHint: true, openWorldHint: false },
           },
           async ({ id }) => {
-            const userId = supabase.auth.user?.id
+            const userId = typeof userClaims?.sub === 'string' ? userClaims.sub : undefined
             if (!userId) throw new Error('Authentication required.')
             const path = `${userId}/syllabus/${id}.pdf`
             const { data, error } = await supabase.storage
