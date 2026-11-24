@@ -14,7 +14,7 @@ A manga-inspired personal dashboard for bringing training, academics, problem-so
 
 ![Status](https://img.shields.io/badge/status-active%20prototype-c52e48?style=flat-square)
 ![Built with](https://img.shields.io/badge/built%20with-HTML%20%2F%20CSS%20%2F%20JavaScript-171717?style=flat-square)
-![Storage](https://img.shields.io/badge/storage-browser%20localStorage-171717?style=flat-square)
+![Storage](https://img.shields.io/badge/storage-localStorage%20%2B%20optional%20Supabase%20sync-171717?style=flat-square)
 ![Hosting](https://img.shields.io/badge/hosted%20on-GitHub%20Pages-171717?style=flat-square)
 
 </div>
