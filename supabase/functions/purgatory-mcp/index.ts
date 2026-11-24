@@ -65,7 +65,7 @@ Deno.serve(
             if (error) throw new Error(`Could not list syllabus files: ${error.message}`)
             return result({
               files: (data ?? []).filter((file) => file.name.endsWith('.pdf')).map((file) => ({
-                id: file.name.replace(/\\.pdf$/i, ''),
+                id: file.name.replace(/\.pdf$/i, ''),
                 title: typeof file.metadata?.title === 'string' ? file.metadata.title : file.name,
                 size_bytes: file.metadata?.size ?? null,
                 uploaded_at: file.created_at ?? null,
