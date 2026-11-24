@@ -86,7 +86,7 @@ PURGATORY stores records in the browser's `localStorage` by default. The Data se
 - Cloud sync uses Supabase Auth and row-level security so accounts can access only their own state.
 - The app is not end-to-end encrypted, and local browser data is not encrypted by PURGATORY.
 - Clearing browser storage may permanently remove a local-only copy.
-- Academic resource files remain in IndexedDB and are not included in cloud sync yet.
+- Academic PDF resources stay in IndexedDB locally and can be uploaded to the private Storage bucket after the initial browser copy is confirmed.
 - Use the JSON export function to keep an independent backup.
 
 See [Supabase setup](supabase/SETUP.md) for cloud sync and [MCP setup](supabase/MCP_SETUP.md) for read-only assistant access.
